@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>871</width>
+    <width>893</width>
     <height>524</height>
    </rect>
   </property>
@@ -120,16 +120,6 @@
      <string>%v</string>
     </property>
    </widget>
-   <widget class="QTreeView" name="dataTreeView">
-    <property name="geometry">
-     <rect>
-      <x>690</x>
-      <y>180</y>
-      <width>171</width>
-      <height>261</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_4">
     <property name="geometry">
      <rect>
@@ -153,13 +143,56 @@
      </rect>
     </property>
    </widget>
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>180</y>
+      <width>201</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>false</bool>
+    </property>
+    <property name="headerHidden">
+     <bool>true</bool>
+    </property>
+    <property name="columnCount">
+     <number>3</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>871</width>
+     <width>893</width>
      <height>25</height>
     </rect>
    </property>
