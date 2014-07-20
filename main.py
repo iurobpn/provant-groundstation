@@ -1,13 +1,9 @@
-import sys
-from PyQt4 import QtGui, uic, QtCore
+from PyQt4 import QtGui, uic
 import PyQt4.Qwt5 as Qwt
 from ui.items import CustomTreeItem
-from random_snippets.qwtplot1 import DataPlot
-from PyQt4 import Qt
-from math import *
 import random
 from PyQt4.Qwt5.anynumpy import *
-XRANGE = 1000
+XRANGE = 500
 
 arange = arange ##just tricking my auto-complete
 2
@@ -28,7 +24,7 @@ class DataSet():
 
     def setColor(self, value):
         ## pen style: http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
-        self.curve.setPen(QtGui.QPen(value,1))
+        self.curve.setPen(QtGui.QPen(value,2))
 
 
 class MainWindow(QtGui.QMainWindow):
