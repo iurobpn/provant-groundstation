@@ -55,3 +55,64 @@ MSP_IDENT_SIZE			 =7
 MSP_SERVO_SIZE			 =16
 MSP_MOTOR_PINS_SIZE		 =8
 MSP_MOTOR_SIZE           =16
+
+
+class Attitude:
+	x 			=0
+	y 			=0
+	z 			=0
+
+class Raw_gps:
+	fix     	=0
+	numsats 	=0
+	lat			=0
+	lon			=0
+	alt			=0
+	speed		=0
+	ggc			=0
+
+class Comp_gps:
+	distance	=0
+	direction	=0
+	update		=0
+
+class Analog:
+	vbat		=0
+	power		=0
+	rssi		=0
+	current		=0
+
+class Altitude:
+	alt 		=0
+	vario		=0
+
+class Status:
+	cycleTime	=0
+	i2cec		=0
+	sensor		=0
+	flag		=0
+	gccs		=0
+
+class Debug:
+	debug		=[None]*4
+
+class Rc:
+	channel		=[None]*12
+
+class Pid:
+	pid			=[None]*30
+
+class Ident:
+	version		=0
+	multtype	=0
+	mspversion	=0
+	capability	=0
+
+class Servo:
+	servo		=[None]*8
+
+class Motor_pins:
+	pin         =[None]*8
+
+class Motor:
+	motor 		=[None]*8
