@@ -1,6 +1,7 @@
 __author__ = 'will'
 from PyQt4 import QtGui, QtCore
 from PyKDE4.kdeui import KVBox, KHBox, KColorButton
+from random import randint
 
 class CustomTreeItem( QtGui.QTreeWidgetItem ):
     '''
@@ -27,15 +28,15 @@ class CustomTreeItem( QtGui.QTreeWidgetItem ):
         ## Column 1 - SpinBox:
         if color:
             self.colorChooser = KColorButton(view)
+            self.colorChooser.setColor(QtGui.QColor(randint(0,255), randint(0,255), randint(0,255)))
             self.colorChooser.setGeometry(QtCore.QRect(0, 0, 10, 10))
     #        self.spinBox.setValue( 0 )
             view.setItemWidget( self, 1, self.colorChooser )
             view.connect( self.colorChooser, QtCore.SIGNAL("changed (const QColor&)"), self.colorChanged )
 
-
-
-        ## Column 2 - Button:
-        self.button = QtGui.QCheckBox( view)
+        ## Column 2 - CheckBox:
+        self.button = QtGui.QCheckBox(view)
+        self.button.setChecked(True)
         #self.button.setText( "button %s" %name )
         view.setItemWidget( self, 2, self.button )
 
@@ -57,10 +58,17 @@ class CustomTreeItem( QtGui.QTreeWidgetItem ):
         return self.colorChooser.value()
 
     def buttonPressed(self):
-        if self.button.isChecked():
+        if self.childCount():
+            for i in range(self.childCount()):
+                self.child(i).button.setChecked(self.button.isChecked())
+                self.child(i).buttonPressed()
+
+        elif self.button.isChecked():
             self.window.enable_plot(self._name)
+            self.window.set_plot_color(self._name,self.colorChooser.color())
         else:
             self.window.disable_plot(self._name)
+
 
     def colorChanged(self):
         print 'color changed'
