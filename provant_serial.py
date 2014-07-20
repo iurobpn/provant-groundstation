@@ -244,22 +244,25 @@ class provant_serial:
 				'''
 
 
-provant=provant_serial()
-while(1):
-	provant.update()
-	print("attitude",provant.attitude.x,provant.attitude.y,provant.attitude.z)
-	print("gps raw",provant.raw_gps.fix,provant.raw_gps.numsats,provant.raw_gps.lat,provant.raw_gps.lon,provant.raw_gps.alt,provant.raw_gps.speed,provant.raw_gps.ggc)
-	print("gps comp",provant.comp_gps.distance,provant.comp_gps.direction,provant.comp_gps.update)
-	print("analog",provant.analog.vbat,provant.analog.power,provant.analog.rssi,provant.analog.current)
-	print("altitude",provant.altitude.alt,provant.altitude.vario)
-	print("status",provant.status.cycleTime,provant.status.i2cec,provant.status.sensor,provant.status.flag,provant.status.gccs)
-	print("debug",provant.debug.debug)
-	print("rc",provant.rc.channel)
-	print("pid",provant.pid.pid)
-	print("ident",provant.ident.version,provant.ident.multtype,provant.ident.mspversion,provant.ident.capability)
-	print("servo",provant.servo.servo)
-	print("motor pins",provant.motor_pins.pin)
-	print("motor",provant.motor.motor)
+
+if __name__ == '__main__':
+    provant=provant_serial()
+
+    while(1):
+        provant.update()
+        print("attitude",provant.attitude.x,provant.attitude.y,provant.attitude.z)
+        print("gps raw",provant.raw_gps.fix,provant.raw_gps.numsats,provant.raw_gps.lat,provant.raw_gps.lon,provant.raw_gps.alt,provant.raw_gps.speed,provant.raw_gps.ggc)
+        print("gps comp",provant.comp_gps.distance,provant.comp_gps.direction,provant.comp_gps.update)
+        print("analog",provant.analog.vbat,provant.analog.power,provant.analog.rssi,provant.analog.current)
+        print("altitude",provant.altitude.alt,provant.altitude.vario)
+        print("status",provant.status.cycleTime,provant.status.i2cec,provant.status.sensor,provant.status.flag,provant.status.gccs)
+        print("debug",provant.debug.debug)
+        print("rc",provant.rc.channel)
+        print("pid",provant.pid.pid)
+        print("ident",provant.ident.version,provant.ident.multtype,provant.ident.mspversion,provant.ident.capability)
+        print("servo",provant.servo.servo)
+        print("motor pins",provant.motor_pins.pin)
+        print("motor",provant.motor.motor)
 
 
 		
