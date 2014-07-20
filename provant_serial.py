@@ -11,37 +11,37 @@ class provant_serial:
 		ser.flush()
 		self.ser=ser
 		self.debug=debug_mode
-		self.attitude 			=Attitude
-		self.raw_gps 			=Raw_gps
-		self.comp_gps 			=Comp_gps
-		self.analog 			=Analog
-		self.altitude 			=Altitude
-		self.status 			=Status
-		self.debug 				=Debug
-		self.rc  				=Rc
-		self.pid 				=Pid
-		self.ident 				=Ident
-		self.servo 				=Servo
-		self.motor_pins 		=Motor_pins
-		self.motor     			=Motor
+		self.attitude 			=Attitude()
+		self.raw_gps 			=Raw_gps()
+		self.comp_gps 			=Comp_gps()
+		self.analog 			=Analog()
+		self.altitude 			=Altitude()
+		self.status 			=Status()
+		self.debug 				=Debug()
+		self.rc  				=Rc()
+		self.pid 				=Pid()
+		self.ident 				=Ident()
+		self.servo 				=Servo()
+		self.motor_pins 		=Motor_pins()
+		self.motor     			=Motor()
 
 	def update(self):
-		self.takehead()
+		self.takeHead()
 
-	def takehead(self):
+	def takeHead(self):
 		if(ord(self.ser.read())==MSP_HEAD[0]):			#checkhead1
 			if(ord(self.ser.read())==MSP_HEAD[1]):		#checkhead2
 				if(ord(self.ser.read())==MSP_HEAD[2]):	#checkhead3
-					self.solvetype()
+					self.solve_type()
 
-	def solvetype(self):
+	def solve_type(self):
 		self.size=ord(self.ser.read()) 	 		#pega tamanho		
 		self.who=ord(self.ser.read())				#descobre quem é
 		self.word=self.ser.read(self.size+1)			#pega os dados + checksum
 		self.L = list(self.word)					#passa para uma lista
-		self.takedata()
+		self.takeData()
 	
-	def takedata(self):
+	def takeData(self):
 		if(self.who==MSP_ATTITUDE):
 			check=self.who^self.size
 			for x in xrange(0,self.size):
@@ -243,7 +243,7 @@ class provant_serial:
 				print(ord(self.L[self.size]),check)
 				'''
 
-'''
+
 provant=provant_serial()
 while(1):
 	provant.update()
@@ -260,6 +260,6 @@ while(1):
 	print("servo",provant.servo.servo)
 	print("motor pins",provant.motor_pins.pin)
 	print("motor",provant.motor.motor)
-'''
+
 
 		
