@@ -91,22 +91,20 @@ class MainWindow(QtGui.QMainWindow):
         #print color
         self.dataSets[name].setColor(color)
 
-    def getColor(self,name):
+    def getColor(self, name):
         return self.findNode(name).colorChooser.color()
 
-
-    def findNode(self,name,node=None):
-
+    def findNode(self, name, node=None):
         if not node:
             root = self.treeWidget.invisibleRootItem()
             node = root
         else:
             #print node.text(0)
-            if node.text(0)==name:
+            if node.text(0) == name:
                 return node
         for i in range(node.childCount()):
-            if self.findNode(name,node.child(i)):
-                return self.findNode(name,node.child(i))
+            if self.findNode(name, node.child(i)):
+                return self.findNode(name, node.child(i))
 
 
 if __name__ == '__main__':
