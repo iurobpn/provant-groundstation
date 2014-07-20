@@ -1,3 +1,4 @@
+import sys
 from PyQt4 import QtGui, uic
 import PyQt4.Qwt5 as Qwt
 from ui.items import CustomTreeItem
@@ -5,14 +6,15 @@ import random
 from PyQt4.Qwt5.anynumpy import *
 XRANGE = 500
 
-arange = arange ##just tricking my auto-complete
-2
+#just tricking my auto-complete
+arange = arange
+
 class DataSet():
     """
     Class responsible for keeping data points, and creating a curve from them.
     """
-    def __init__(self,name):
-        self.data = list(zeros(XRANGE, Float))
+    def __init__(self, name):
+        self.data = list(zeros(XRANGE, Float)) ##starts Y with zeros
         self.x = arange(0.0, 1000, 0.5)
         self.curve = Qwt.QwtPlotCurve("Data"+name)
 
@@ -48,16 +50,14 @@ class MainWindow(QtGui.QMainWindow):
     def addArray(self, datasetName, points):
         datasetName_ = datasetName + str(0)
         if datasetName_ not in self.dataSets:
-            self.addDataTree(datasetName,len(points))
+            self.addDataTree(datasetName, len(points))
             for i in range(len(points)):
                 datasetName_ = datasetName+str(i)
                 self.dataSets[datasetName_] = DataSet(datasetName)
                 self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                 self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
-
         for i in range(len(points)):
                 self.dataSets[datasetName+str(i)].addPoint(points[i])
-
 
     def setupPlot(self):
         self.startTimer(50)
@@ -81,21 +81,21 @@ class MainWindow(QtGui.QMainWindow):
     def addSingleData(self, name):
         CustomTreeItem(self, self.treeWidget, name, self.treeWidget)
 
-    def disable_plot(self, name):
+    def disablePlot(self, name):
         self.dataSets[name].curve.detach()
 
-    def enable_plot(self, name):
+    def enablePlot(self, name):
         self.dataSets[name].curve.attach(self.qwtPlot)
 
-    def set_plot_color(self, name, color):
+    def setPlotColor(self, name, color):
         #print color
         self.dataSets[name].setColor(color)
 
     def getColor(self,name):
-        return self.find_node(name).colorChooser.color()
+        return self.findNode(name).colorChooser.color()
 
 
-    def find_node(self,name,node=None):
+    def findNode(self,name,node=None):
 
         if not node:
             root = self.treeWidget.invisibleRootItem()
@@ -105,8 +105,8 @@ class MainWindow(QtGui.QMainWindow):
             if node.text(0)==name:
                 return node
         for i in range(node.childCount()):
-            if self.find_node(name,node.child(i)):
-                return self.find_node(name,node.child(i))
+            if self.findNode(name,node.child(i)):
+                return self.findNode(name,node.child(i))
 
 
 if __name__ == '__main__':

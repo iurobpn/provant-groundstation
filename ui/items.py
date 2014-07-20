@@ -3,16 +3,9 @@ from PyQt4 import QtGui, QtCore
 from PyKDE4.kdeui import KVBox, KHBox, KColorButton
 from random import randint
 
-class CustomTreeItem( QtGui.QTreeWidgetItem ):
-    '''
-    Custom QTreeWidgetItem with Widgets
-    '''
+class CustomTreeItem(QtGui.QTreeWidgetItem):
 
-    def __init__( self,window, parent, name, view=None, color=True ):
-        '''
-        parent (QTreeWidget) : Item's QTreeWidget parent.
-        name   (str)         : Item's name. just an example.
-        '''
+    def __init__(self, window, parent, name, view=None, color=True):
         if view:
             self.view = view
         if not view:
@@ -20,42 +13,26 @@ class CustomTreeItem( QtGui.QTreeWidgetItem ):
         self.window = window
         self._name = name
         ## Init super class ( QtGui.QTreeWidgetItem )
-        super( CustomTreeItem, self ).__init__( parent )
+        super(CustomTreeItem, self).__init__(parent)
 
         ## Column 0 - Text:
-        self.setText( 0, name )
+        self.setText(0, name)
 
-        ## Column 1 - SpinBox:
+        ## Column 1 - Color:
         if color:
             self.colorChooser = KColorButton(view)
-            self.colorChooser.setColor(QtGui.QColor(randint(0,255), randint(0,255), randint(0,255)))
+            self.colorChooser.setColor(QtGui.QColor(randint(0, 255), randint(0, 255), randint(0, 255)))
             self.colorChooser.setGeometry(QtCore.QRect(0, 0, 10, 10))
-    #        self.spinBox.setValue( 0 )
-            view.setItemWidget( self, 1, self.colorChooser )
-            view.connect( self.colorChooser, QtCore.SIGNAL("changed (const QColor&)"), self.colorChanged )
+            view.setItemWidget(self, 1, self.colorChooser)
+            view.connect(self.colorChooser, QtCore.SIGNAL("changed (const QColor&)"), self.colorChanged)
 
         ## Column 2 - CheckBox:
         self.button = QtGui.QCheckBox(view)
         self.button.setChecked(True)
-        #self.button.setText( "button %s" %name )
-        view.setItemWidget( self, 2, self.button )
+        view.setItemWidget(self, 2, self.button)
 
         ## Signals
-        view.connect( self.button, QtCore.SIGNAL("clicked()"), self.buttonPressed )
-
-    @property
-    def name(self):
-        '''
-        Return name ( 1st column text )
-        '''
-        return self.text(0)
-
-    @property
-    def value(self):
-        '''
-        Return value ( 2nd column int)
-        '''
-        return self.colorChooser.value()
+        view.connect(self.button, QtCore.SIGNAL("clicked()"), self.buttonPressed)
 
     def buttonPressed(self):
         if self.childCount():
@@ -64,12 +41,11 @@ class CustomTreeItem( QtGui.QTreeWidgetItem ):
                 self.child(i).buttonPressed()
 
         elif self.button.isChecked():
-            self.window.enable_plot(self._name)
-            self.window.set_plot_color(self._name,self.colorChooser.color())
+            self.window.enablePlot(self._name)
+            self.window.setPlotColor(self._name,self.colorChooser.color())
         else:
-            self.window.disable_plot(self._name)
-
+            self.window.disablePlot(self._name)
 
     def colorChanged(self):
         print 'color changed'
-        self.window.set_plot_color(self._name,self.colorChooser.color())
+        self.window.setPlotColor(self._name,self.colorChooser.color())
