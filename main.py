@@ -5,6 +5,7 @@ from ui.items import CustomTreeItem
 from ui.data import DataSet
 import random
 from PyQt4.Qwt5.anynumpy import *
+from provant_serial import ProvantSerial
 XRANGE = 500
 
 #just tricking my auto-complete
@@ -21,6 +22,10 @@ class MainWindow(QtGui.QMainWindow):
         self.show()
         self.setupPlot()
         self.dataSets = {}
+        self.provantSerial = None
+
+    def setSerial(self, ser):
+        self.provantSerial = ser
 
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
@@ -45,13 +50,18 @@ class MainWindow(QtGui.QMainWindow):
     def setupPlot(self):
         self.startTimer(50)
 
+    def getDataFromSerial(self):
+        self.provantSerial.update()
+        self.addArray('Attitude', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+        self.addArray('Gyro', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+
+
+
     def timerEvent(self, e):
-        asd = 3.3
-        self.addPoint('gyr', asd + random.randint(40)/100.0)
-        self.addArray('acc',[1,2,3])
-        self.qwtPlot.replot()
+        self.getDataFromSerial()
         for namea, dataset in self.dataSets.items():
             dataset.update()
+        self.qwtPlot.replot()
 
     def setupTreeWidget(self):
         self.treeWidget.header().setResizeMode(3)
@@ -91,7 +101,9 @@ class MainWindow(QtGui.QMainWindow):
 
 
 if __name__ == '__main__':
+    ser = ProvantSerial()
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
+    window.setSerial(ser)
     #window.addDataTree('acc',3)
     sys.exit(app.exec_())
