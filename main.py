@@ -2,32 +2,15 @@ import sys
 from PyQt4 import QtGui, uic
 import PyQt4.Qwt5 as Qwt
 from ui.items import CustomTreeItem
+from ui.data import DataSet
 import random
+from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
+from provant_serial import ProvantSerial
 XRANGE = 500
 
 #just tricking my auto-complete
 arange = arange
-
-class DataSet():
-    """
-    Class responsible for keeping data points, and creating a curve from them.
-    """
-    def __init__(self, name):
-        self.data = list(zeros(XRANGE, Float)) ##starts Y with zeros
-        self.x = arange(0.0, 1000, 0.5)
-        self.curve = Qwt.QwtPlotCurve("Data"+name)
-
-    def addPoint(self, y):
-        self.data.append(y)
-
-    def update(self):
-        self.curve.setData(self.x, self.data[-XRANGE:])
-
-    def setColor(self, value):
-        ## pen style: http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
-        self.curve.setPen(QtGui.QPen(value,2))
-
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -38,10 +21,33 @@ class MainWindow(QtGui.QMainWindow):
         self.show()
         self.setupPlot()
         self.dataSets = {}
+        self.provantSerial = None
+        legend = Qwt.QwtLegend()
+        self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
+        self.setupSerial()
+        self.timerCounter =0
+
+    def setupSerial(self):
+        self.serialList.clear()
+        for serial in list_serial_ports():
+            self.serialList.addItem(serial)
+        self.serialConnect.clicked.connect(self.connectToSerial)
+
+    def connectToSerial(self):
+        try:
+            self.setSerial(ProvantSerial(serial_name=str(self.serialList.currentText())))
+            self.serialStatus.setText('OK!')
+        except Exception, e:
+            self.serialStatus.setText("ERROR!")
+            print e
+
+
+    def setSerial(self, ser):
+        self.provantSerial = ser
 
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
-            self.dataSets[datasetName] = DataSet(datasetName)
+            self.dataSets[datasetName] = DataSet(self, datasetName)
             self.dataSets[datasetName].curve.attach(self.qwtPlot)
             self.addSingleData(datasetName)
             self.dataSets[datasetName].setColor(self.getColor(datasetName))
@@ -53,7 +59,7 @@ class MainWindow(QtGui.QMainWindow):
             self.addDataTree(datasetName, len(points))
             for i in range(len(points)):
                 datasetName_ = datasetName+str(i)
-                self.dataSets[datasetName_] = DataSet(datasetName)
+                self.dataSets[datasetName_] = DataSet(self, datasetName_)
                 self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                 self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
         for i in range(len(points)):
@@ -62,21 +68,44 @@ class MainWindow(QtGui.QMainWindow):
     def setupPlot(self):
         self.startTimer(50)
 
-    def timerEvent(self, e):
-        asd = 3.3
-        self.addPoint('gyr', asd + random.randint(40)/100.0)
-        self.addArray('acc',[1,2,3])
-        self.qwtPlot.replot()
+    def getDataFromSerial(self):
+        self.provantSerial.update()
+        self.addArray('Attitude', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+        self.addArray('Gyro', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+        self.addArray('MotorSetpoint', (self.provantSerial.motor.motor[0], self.provantSerial.motor.motor[1]))
+        self.addArray('ServoAngle', (self.provantSerial.servo.servo[4], self.provantSerial.servo.servo[5]))
+
+    def updateData(self):
+        self.getDataFromSerial()
         for namea, dataset in self.dataSets.items():
             dataset.update()
+        self.qwtPlot.replot()
+        self.lMotorSetpoint.setValue(self.provantSerial.motor.motor[0])
+        self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
+        self.lServo.setValue(self.provantSerial.servo.servo[4])
+        self.rServo.setValue(self.provantSerial.servo.servo[5])
+
+    def timerEvent(self, e):
+        self.timerCounter += 1
+        if self.provantSerial:
+            self.updateData()
+        elif (self.timerCounter % 1000) == 1:
+            self.setupSerial()
+
 
     def setupTreeWidget(self):
-        self.treeWidget.header().setResizeMode(3)
+        #self.treeWidget.header().setResizeMode(3)
+        self.treeWidget.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.header().setResizeMode(1, QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(2, QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.setColumnWidth(1, 40)
 
     def addDataTree(self, data, children_number):
         parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
         for i in range(children_number):
             CustomTreeItem(self, parent, data+str(i))
+        self.treeWidget.resizeColumnToContents(2)
 
     def addSingleData(self, name):
         CustomTreeItem(self, self.treeWidget, name, self.treeWidget)
@@ -108,7 +137,9 @@ class MainWindow(QtGui.QMainWindow):
 
 
 if __name__ == '__main__':
+    #ser = ProvantSerial()
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
+    #window.setSerial(ser)
     #window.addDataTree('acc',3)
     sys.exit(app.exec_())

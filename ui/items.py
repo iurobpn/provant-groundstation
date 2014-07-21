@@ -31,8 +31,18 @@ class CustomTreeItem(QtGui.QTreeWidgetItem):
         self.button.setChecked(True)
         view.setItemWidget(self, 2, self.button)
 
+        ## Column 3 - Current value:
+        if color:
+            self.setText(3, 'N/A')
+        else:
+            self.setText(3, '')
+
         ## Signals
         view.connect(self.button, QtCore.SIGNAL("clicked()"), self.buttonPressed)
+
+
+    def setDataValue(self, value):
+        self.setText(3, str(value))
 
     def buttonPressed(self):
         if self.childCount():
@@ -42,10 +52,10 @@ class CustomTreeItem(QtGui.QTreeWidgetItem):
 
         elif self.button.isChecked():
             self.window.enablePlot(self._name)
-            self.window.setPlotColor(self._name,self.colorChooser.color())
+            self.window.setPlotColor(self._name, self.colorChooser.color())
         else:
             self.window.disablePlot(self._name)
 
     def colorChanged(self):
         print 'color changed'
-        self.window.setPlotColor(self._name,self.colorChooser.color())
+        self.window.setPlotColor(self._name, self.colorChooser.color())
