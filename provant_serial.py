@@ -5,6 +5,7 @@ import serial
 from multwii_const import *
 
 
+
 class ProvantSerial:
     def __init__(self, serial_name='/dev/ttyUSB11', baudrate_value=460800, debug_mode=False):
         ser = serial.Serial(serial_name, baudrate_value)
@@ -25,8 +26,27 @@ class ProvantSerial:
         self.motor_pins = Motor_pins()
         self.motor = Motor()
 
+
+    def decode32(self, data):
+        #print data
+        result = (ord(data[0]) & 0xff) + ((ord(data[1]) & 0xff) << 8) + ((ord(data[2]) & 0xff) << 16) + ((ord(data[3]) & 0xff) << 24)
+        is_negative = ord(data[3]) >= 128
+        if is_negative:
+            result -= 2**32
+        return result
+
+    def decode16(self, data):
+        #print data
+        result = (ord(data[0]) & 0xff) + ((ord(data[1]) & 0xff) << 8)
+        is_negative = ord(data[1]) >= 128
+        if is_negative:
+            result -= 2**16
+        return result
+
+
     def update(self):
-        self.takeHead()
+        while self.ser.inWaiting() > 10:
+            self.takeHead()
 
     def takeHead(self):
         if (ord(self.ser.read()) == MSP_HEAD[0]):  # checkhead1
@@ -47,9 +67,9 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.attitude.x = ord(self.L[0]) + (ord(self.L[1]) << 8)
-                self.attitude.y = ord(self.L[2]) + (ord(self.L[3]) << 8)
-                self.attitude.z = ord(self.L[4]) + (ord(self.L[5]) << 8)
+                self.attitude.x = self.decode16(self.L[0:2])
+                self.attitude.y = self.decode16(self.L[2:4])
+                self.attitude.z = self.decode16(self.L[4:6])
                 '''
                 print("attitude",self.attitude.x,self.attitude.y,self.attitude.z)
             else:

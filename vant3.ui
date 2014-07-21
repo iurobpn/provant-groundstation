@@ -30,13 +30,13 @@
           <property name="minimumSize">
            <size>
             <width>300</width>
-            <height>200</height>
+            <height>250</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>300</width>
-            <height>200</height>
+            <height>300</height>
            </size>
           </property>
           <property name="frameShape">
@@ -45,17 +45,17 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <widget class="QProgressBar" name="rMotorSpeed">
+          <widget class="QProgressBar" name="rMotorSetpoint">
            <property name="geometry">
             <rect>
              <x>240</x>
-             <y>20</y>
+             <y>140</y>
              <width>31</width>
              <height>111</height>
             </rect>
            </property>
            <property name="maximum">
-            <number>20</number>
+            <number>255</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -64,17 +64,17 @@
             <enum>Qt::Vertical</enum>
            </property>
           </widget>
-          <widget class="QProgressBar" name="lMotorSpeed">
+          <widget class="QProgressBar" name="lMotorSetpoint">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>20</y>
+             <y>140</y>
              <width>31</width>
              <height>111</height>
             </rect>
            </property>
            <property name="maximum">
-            <number>20</number>
+            <number>255</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -87,7 +87,7 @@
            <property name="geometry">
             <rect>
              <x>150</x>
-             <y>140</y>
+             <y>260</y>
              <width>118</width>
              <height>23</height>
             </rect>
@@ -121,7 +121,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>140</y>
+             <y>260</y>
              <width>118</width>
              <height>23</height>
             </rect>
@@ -151,13 +151,161 @@
             <string>%v</string>
            </property>
           </widget>
-          <zorder>rMotorSpeed</zorder>
-          <zorder>lMotorSpeed</zorder>
-          <zorder>rServo</zorder>
-          <zorder>lServo</zorder>
-          <zorder>qwtPlot</zorder>
-          <zorder>horizontalLayoutWidget</zorder>
-          <zorder>horizontalLayoutWidget</zorder>
+          <widget class="QProgressBar" name="lMotorRpm">
+           <property name="geometry">
+            <rect>
+             <x>50</x>
+             <y>140</y>
+             <width>20</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="maximum">
+            <number>15000</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="QProgressBar" name="lMotorRpm_2">
+           <property name="geometry">
+            <rect>
+             <x>210</x>
+             <y>140</y>
+             <width>20</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="maximum">
+            <number>15000</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_2">
+           <property name="geometry">
+            <rect>
+             <x>50</x>
+             <y>120</y>
+             <width>31</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Rpm</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>120</y>
+             <width>31</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Sp</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_4">
+           <property name="geometry">
+            <rect>
+             <x>210</x>
+             <y>120</y>
+             <width>31</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Rpm</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_5">
+           <property name="geometry">
+            <rect>
+             <x>250</x>
+             <y>120</y>
+             <width>31</width>
+             <height>17</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Sp</string>
+           </property>
+          </widget>
+          <widget class="QFrame" name="frame_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>0</y>
+             <width>281</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QPushButton" name="serialConnect">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>0</y>
+              <width>71</width>
+              <height>27</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+           <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_6">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>61</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Serial:</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="serialList">
+            <property name="geometry">
+             <rect>
+              <x>50</x>
+              <y>0</y>
+              <width>151</width>
+              <height>27</height>
+             </rect>
+            </property>
+           </widget>
+           <widget class="KSqueezedTextLabel" name="serialStatus">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>30</y>
+              <width>61</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Status</string>
+            </property>
+           </widget>
+          </widget>
          </widget>
         </item>
         <item>
@@ -174,6 +322,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
+          <zorder>frame</zorder>
           <zorder>frame</zorder>
          </widget>
         </item>
@@ -195,7 +344,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Available Data</string>
+             <string>Available Data:</string>
             </property>
            </widget>
           </item>
@@ -213,11 +362,14 @@
             <property name="alternatingRowColors">
              <bool>false</bool>
             </property>
+            <property name="indentation">
+             <number>10</number>
+            </property>
             <property name="headerHidden">
              <bool>true</bool>
             </property>
             <property name="columnCount">
-             <number>3</number>
+             <number>4</number>
             </property>
             <column>
              <property name="text">
@@ -234,6 +386,11 @@
               <string>3</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string notr="true">4</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>
@@ -243,15 +400,7 @@
      </layout>
     </item>
    </layout>
-   <zorder>gridLayoutWidget</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
-   <zorder>frame</zorder>
    <zorder></zorder>
-   <zorder>rServo</zorder>
-   <zorder>lServo</zorder>
-   <zorder>frame_2</zorder>
-   <zorder>treeWidget</zorder>
-   <zorder>label</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

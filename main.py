@@ -4,14 +4,13 @@ import PyQt4.Qwt5 as Qwt
 from ui.items import CustomTreeItem
 from ui.data import DataSet
 import random
+from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
 from provant_serial import ProvantSerial
 XRANGE = 500
 
 #just tricking my auto-complete
 arange = arange
-
-
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -23,13 +22,29 @@ class MainWindow(QtGui.QMainWindow):
         self.setupPlot()
         self.dataSets = {}
         self.provantSerial = None
+        legend = Qwt.QwtLegend()
+        self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
+        self.setupSerial()
+
+    def setupSerial(self):
+        for serial in list_serial_ports():
+            self.serialList.addItem(serial)
+        self.serialConnect.clicked.connect(self.connectToSerial)
+
+    def connectToSerial(self):
+        try:
+            self.setSerial(ProvantSerial(serial_name=str(self.serialList.currentText())))
+            self.serialStatus.setText('OK!')
+        except:
+            self.serialStatus.setText("ERROR!")
+
 
     def setSerial(self, ser):
         self.provantSerial = ser
 
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
-            self.dataSets[datasetName] = DataSet(datasetName)
+            self.dataSets[datasetName] = DataSet(self, datasetName)
             self.dataSets[datasetName].curve.attach(self.qwtPlot)
             self.addSingleData(datasetName)
             self.dataSets[datasetName].setColor(self.getColor(datasetName))
@@ -41,7 +56,7 @@ class MainWindow(QtGui.QMainWindow):
             self.addDataTree(datasetName, len(points))
             for i in range(len(points)):
                 datasetName_ = datasetName+str(i)
-                self.dataSets[datasetName_] = DataSet(datasetName)
+                self.dataSets[datasetName_] = DataSet(self, datasetName_)
                 self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                 self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
         for i in range(len(points)):
@@ -54,22 +69,36 @@ class MainWindow(QtGui.QMainWindow):
         self.provantSerial.update()
         self.addArray('Attitude', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
         self.addArray('Gyro', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+        self.addArray('MotorSetpoint', (self.provantSerial.motor.motor[0], self.provantSerial.motor.motor[1]))
+        self.addArray('ServoAngle', (self.provantSerial.servo.servo[0], self.provantSerial.servo.servo[1]))
 
-
-
-    def timerEvent(self, e):
+    def updateData(self):
         self.getDataFromSerial()
         for namea, dataset in self.dataSets.items():
             dataset.update()
         self.qwtPlot.replot()
+        self.lMotorSetpoint.setValue(self.provantSerial.motor.motor[0])
+        self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
+        self.lServo.setValue(self.provantSerial.servo.servo[0])
+        self.rServo.setValue(self.provantSerial.servo.servo[1])
+
+    def timerEvent(self, e):
+        if self.provantSerial:
+            self.updateData()
 
     def setupTreeWidget(self):
-        self.treeWidget.header().setResizeMode(3)
+        #self.treeWidget.header().setResizeMode(3)
+        self.treeWidget.header().setResizeMode(0,QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.header().setResizeMode(1,QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(2,QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(3,QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.setColumnWidth(1,40)
 
     def addDataTree(self, data, children_number):
         parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
         for i in range(children_number):
             CustomTreeItem(self, parent, data+str(i))
+        self.treeWidget.resizeColumnToContents(2)
 
     def addSingleData(self, name):
         CustomTreeItem(self, self.treeWidget, name, self.treeWidget)
@@ -104,6 +133,6 @@ if __name__ == '__main__':
     ser = ProvantSerial()
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
-    window.setSerial(ser)
+    #window.setSerial(ser)
     #window.addDataTree('acc',3)
     sys.exit(app.exec_())
