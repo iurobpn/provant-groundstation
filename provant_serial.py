@@ -25,6 +25,7 @@ class ProvantSerial:
         self.servo = Servo()
         self.motor_pins = Motor_pins()
         self.motor = Motor()
+        self.imu = RawIMU()
 
 
     def decode32(self, data):
@@ -249,6 +250,20 @@ class ProvantSerial:
                 print(ord(self.L[self.size]),check)
                 '''
 
+        if (self.who == MSP_RAW_IMU):
+            check = self.who ^ self.size
+            #print "imu" , self.size
+            for x in xrange(0, self.size):
+                check ^= ord(self.L[x])
+            if (check == ord(self.L[self.size])):
+                for i in range(3):
+                    self.imu.gyro[i] = self.decode16(self.L[i*2:i*2+2])
+                for i in range(3, 6):
+                    self.imu.acc[i-3] = self.decode16(self.L[i*2:i*2+2])
+                for i in range(6, 9):
+                    self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
+
+
         if (self.who == MSP_MOTOR):
             check = self.who ^ self.size
             for x in xrange(0, self.size):
@@ -281,8 +296,8 @@ if __name__ == '__main__':
         print("debug", provant.debug.debug)
         print("rc", provant.rc.channel)
         print("pid", provant.pid.pid)
-        print(
-        "ident", provant.ident.version, provant.ident.multtype, provant.ident.mspversion, provant.ident.capability)
+        print("ident", provant.ident.version, provant.ident.multtype, provant.ident.mspversion, provant.ident.capability)
+        print("imu:", provant.imu.gyro,provant.imu.acc,provant.imu.mag)
         print("servo", provant.servo.servo)
         print("motor pins", provant.motor_pins.pin)
         print("motor", provant.motor.motor)
