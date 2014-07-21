@@ -37,8 +37,9 @@ class MainWindow(QtGui.QMainWindow):
         try:
             self.setSerial(ProvantSerial(serial_name=str(self.serialList.currentText())))
             self.serialStatus.setText('OK!')
-        except:
+        except Exception, e:
             self.serialStatus.setText("ERROR!")
+            print e
 
 
     def setSerial(self, ser):
@@ -88,7 +89,7 @@ class MainWindow(QtGui.QMainWindow):
         self.timerCounter += 1
         if self.provantSerial:
             self.updateData()
-        elif (self.timerCounter % 100) == 1:
+        elif (self.timerCounter % 1000) == 1:
             self.setupSerial()
 
 
