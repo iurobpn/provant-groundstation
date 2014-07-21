@@ -25,8 +25,10 @@ class MainWindow(QtGui.QMainWindow):
         legend = Qwt.QwtLegend()
         self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
         self.setupSerial()
+        self.timerCounter =0
 
     def setupSerial(self):
+        self.serialList.clear()
         for serial in list_serial_ports():
             self.serialList.addItem(serial)
         self.serialConnect.clicked.connect(self.connectToSerial)
@@ -83,16 +85,20 @@ class MainWindow(QtGui.QMainWindow):
         self.rServo.setValue(self.provantSerial.servo.servo[5])
 
     def timerEvent(self, e):
+        self.timerCounter += 1
         if self.provantSerial:
             self.updateData()
+        elif (self.timerCounter % 100) == 1:
+            self.setupSerial()
+
 
     def setupTreeWidget(self):
         #self.treeWidget.header().setResizeMode(3)
-        self.treeWidget.header().setResizeMode(0,QtGui.QHeaderView.ResizeToContents)
-        self.treeWidget.header().setResizeMode(1,QtGui.QHeaderView.Fixed)
-        self.treeWidget.header().setResizeMode(2,QtGui.QHeaderView.Fixed)
-        self.treeWidget.header().setResizeMode(3,QtGui.QHeaderView.ResizeToContents)
-        self.treeWidget.setColumnWidth(1,40)
+        self.treeWidget.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.header().setResizeMode(1, QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(2, QtGui.QHeaderView.Fixed)
+        self.treeWidget.header().setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
+        self.treeWidget.setColumnWidth(1, 40)
 
     def addDataTree(self, data, children_number):
         parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
@@ -130,7 +136,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
 if __name__ == '__main__':
-    ser = ProvantSerial()
+    #ser = ProvantSerial()
     app = QtGui.QApplication(sys.argv)
     window = MainWindow()
     #window.setSerial(ser)
