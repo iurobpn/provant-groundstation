@@ -13,7 +13,7 @@ class DataSet():
         self.window = window
         self.data = list(zeros(XRANGE, Float)) ##starts Y with zeros
         self.x = arange(0.0, 1000, 0.5)
-        self.curve = Qwt.QwtPlotCurve("Data"+name)
+        self.curve = Qwt.QwtPlotCurve(name)
         self.treeItem = None
         self.name = name
 

@@ -230,7 +230,7 @@ class ProvantSerial:
             if (check == ord(self.L[self.size])):
                 servo = [None] * (self.size / 2)
                 for x in xrange(0, self.size / 2):
-                    self.servo.servo[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
+                    self.servo.servo[x] = self.decode16(self.L[x*2:x*2+2])
                 '''
                 print("servo",self.servo.servo)
             else:

@@ -63,6 +63,9 @@
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
+           <property name="format">
+            <string>%v</string>
+           </property>
           </widget>
           <widget class="QProgressBar" name="lMotorSetpoint">
            <property name="geometry">
@@ -82,6 +85,9 @@
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
+           <property name="format">
+            <string>%v</string>
+           </property>
           </widget>
           <widget class="QProgressBar" name="rServo">
            <property name="geometry">
@@ -99,10 +105,10 @@
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <number>-60</number>
+            <number>-500</number>
            </property>
            <property name="maximum">
-            <number>60</number>
+            <number>500</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -114,7 +120,7 @@
             <enum>QProgressBar::TopToBottom</enum>
            </property>
            <property name="format">
-            <string>%v</string>
+            <string>%vº</string>
            </property>
           </widget>
           <widget class="QProgressBar" name="lServo">
@@ -133,10 +139,10 @@
             <bool>false</bool>
            </property>
            <property name="minimum">
-            <number>-60</number>
+            <number>-500</number>
            </property>
            <property name="maximum">
-            <number>60</number>
+            <number>500</number>
            </property>
            <property name="value">
             <number>0</number>
@@ -148,7 +154,7 @@
             <enum>QProgressBar::TopToBottom</enum>
            </property>
            <property name="format">
-            <string>%v</string>
+            <string>%vº</string>
            </property>
           </widget>
           <widget class="QProgressBar" name="lMotorRpm">
@@ -169,6 +175,9 @@
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
+           <property name="format">
+            <string>%v</string>
+           </property>
           </widget>
           <widget class="QProgressBar" name="lMotorRpm_2">
            <property name="geometry">
@@ -187,6 +196,9 @@
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
+           </property>
+           <property name="format">
+            <string>%v</string>
            </property>
           </widget>
           <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_2">

@@ -70,7 +70,7 @@ class MainWindow(QtGui.QMainWindow):
         self.addArray('Attitude', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
         self.addArray('Gyro', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
         self.addArray('MotorSetpoint', (self.provantSerial.motor.motor[0], self.provantSerial.motor.motor[1]))
-        self.addArray('ServoAngle', (self.provantSerial.servo.servo[0], self.provantSerial.servo.servo[1]))
+        self.addArray('ServoAngle', (self.provantSerial.servo.servo[4], self.provantSerial.servo.servo[5]))
 
     def updateData(self):
         self.getDataFromSerial()
@@ -79,8 +79,8 @@ class MainWindow(QtGui.QMainWindow):
         self.qwtPlot.replot()
         self.lMotorSetpoint.setValue(self.provantSerial.motor.motor[0])
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
-        self.lServo.setValue(self.provantSerial.servo.servo[0])
-        self.rServo.setValue(self.provantSerial.servo.servo[1])
+        self.lServo.setValue(self.provantSerial.servo.servo[4])
+        self.rServo.setValue(self.provantSerial.servo.servo[5])
 
     def timerEvent(self, e):
         if self.provantSerial:
