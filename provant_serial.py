@@ -84,13 +84,11 @@ class ProvantSerial:
             if (check == ord(self.L[self.size])):
                 self.raw_gps.fix = ord(self.L[0])
                 self.raw_gps.numsats = ord(self.L[1])
-                self.raw_gps.lat = ord(self.L[2]) + (ord(self.L[3]) << 8) + (ord(self.L[4]) << 16) + (
-                ord(self.L[5]) << 24)
-                self.raw_gps.lon = ord(self.L[6]) + (ord(self.L[7]) << 8) + (ord(self.L[8]) << 16) + (
-                ord(self.L[9]) << 24)
-                self.raw_gps.alt = ord(self.L[10]) + (ord(self.L[11]) << 8)
-                self.raw_gps.speed = ord(self.L[12]) + (ord(self.L[13]) << 8)
-                self.raw_gps.ggc = ord(self.L[14]) + (ord(self.L[15]) << 8)
+                self.raw_gps.lat = self.decode32(self.L[2:6])
+                self.raw_gps.lon = self.decode32(self.L[6:10])
+                self.raw_gps.alt = self.decode16(self.L[10:12])
+                self.raw_gps.speed = self.decode16(self.L[12:14])
+                self.raw_gps.ggc = self.decode16(self.L[14:16])
                 '''
                 print("gps raw",self.raw_gps.fix,self.raw_gps.numsats,self.raw_gps.lat,self.raw_gps.lon,self.raw_gps.alt,self.raw_gps.speed,self.raw_gps.ggc)
             else:
@@ -103,8 +101,8 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.comp_gps.distance = ord(self.L[0]) + (ord(self.L[1]) << 8)
-                self.comp_gps.direction = ord(self.L[2]) + (ord(self.L[3]) << 8)
+                self.comp_gps.distance = self.decode16(self.L[0:2])
+                self.comp_gps.direction = self.decode16(self.L[2:4])
                 self.comp_gps.update = ord(self.L[4])
             '''
                 print("gps comp",self.comp_gps.distance,self.comp_gps.direction,self.comp_gps.update)
@@ -119,9 +117,9 @@ class ProvantSerial:
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
                 self.analog.vbat = ord(self.L[0])
-                self.analog.power = ord(self.L[1]) + (ord(self.L[2]) << 8)
-                self.analog.rssi = ord(self.L[3]) + (ord(self.L[4]) << 8)
-                self.analog.current = ord(self.L[5]) + (ord(self.L[6]) << 8)
+                self.analog.power = self.decode16(self.L[1:3])
+                self.analog.rssi = self.decode16(self.L[3:5])
+                self.analog.current = self.decode16(self.L[5:7])
             '''
                 print("analog",self.analog.vbat,self.analog.power,self.analog.rssi,self.analog.current)
             else:
@@ -134,9 +132,8 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.altitude.alt = ord(self.L[0]) + (ord(self.L[1]) << 8) + (ord(self.L[2]) << 16) + (
-                ord(self.L[3]) << 24)
-                self.altitude.vario = ord(self.L[4]) + (ord(self.L[5]) << 8)
+                self.altitude.alt = self.decode32(self.L[0:4])
+                self.altitude.vario = self.decode16(self.L[4:6])
             '''
                 print("altitude",self.altitude.alt,self.altitude.vario)
             else:
@@ -149,11 +146,10 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.status.cycleTime = ord(self.L[0]) + (ord(self.L[1]) << 8)
-                self.status.i2cec = ord(self.L[2]) + (ord(self.L[3]) << 8)
-                self.status.sensor = ord(self.L[4]) + (ord(self.L[5]) << 8)
-                self.status.flag = ord(self.L[6]) + (ord(self.L[7]) << 8) + (ord(self.L[8]) << 16) + (
-                ord(self.L[9]) << 24)
+                self.status.cycleTime = self.decode16(self.L[0:2])
+                self.status.i2cec = self.decode16(self.L[2:4])
+                self.status.sensor = self.decode16(self.L[4:6])
+                self.status.flag = self.decode32(self.L[6:10])
                 self.status.gccs = ord(self.L[10])
             '''
                 print("status",self.status.cycleTime,self.status.i2cec,self.status.sensor,self.status.flag,self.status.gccs)
