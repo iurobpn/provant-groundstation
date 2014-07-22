@@ -334,8 +334,17 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <zorder>frame</zorder>
-          <zorder>frame</zorder>
+          <widget class="QWidget" name="verticalLayoutWidget">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>10</y>
+             <width>481</width>
+             <height>271</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="lay3"/>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -356,7 +365,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Available Data:</string>
+             <string>Data available</string>
             </property>
            </widget>
           </item>
