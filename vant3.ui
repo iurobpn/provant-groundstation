@@ -337,10 +337,10 @@
           <widget class="QWidget" name="verticalLayoutWidget">
            <property name="geometry">
             <rect>
-             <x>20</x>
+             <x>10</x>
              <y>10</y>
-             <width>481</width>
-             <height>271</height>
+             <width>541</width>
+             <height>291</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="lay3"/>
@@ -365,7 +365,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Data available</string>
+             <string>Data Available</string>
             </property>
            </widget>
           </item>
