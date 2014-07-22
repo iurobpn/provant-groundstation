@@ -68,9 +68,9 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.attitude.x = self.decode16(self.L[0:2])
-                self.attitude.y = self.decode16(self.L[2:4])
-                self.attitude.z = self.decode16(self.L[4:6])
+                self.attitude.x = self.decode16(self.L[0:2])/10
+                self.attitude.y = self.decode16(self.L[2:4])/10
+                self.attitude.z = self.decode16(self.L[4:6])/10
                 '''
                 print("attitude",self.attitude.x,self.attitude.y,self.attitude.z)
             else:

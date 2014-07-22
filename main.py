@@ -7,6 +7,7 @@ import random
 from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
 from provant_serial import ProvantSerial
+from ui.artificalHorizon import AttitudeIndicator
 XRANGE = 500
 
 #just tricking my auto-complete
@@ -26,6 +27,13 @@ class MainWindow(QtGui.QMainWindow):
         self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
         self.setupSerial()
         self.timerCounter =0
+        self.horizon = AttitudeIndicator(self.frame_2)
+        self.lay3.addWidget(self.horizon)
+        #self.Dial = SpeedoMeter(self.frameh_2)
+        #print dir(self.frame_2)
+        # self.horizon.
+        self.horizon.gradient=-0.1
+
 
     def setupSerial(self):
         self.serialList.clear()
@@ -84,6 +92,8 @@ class MainWindow(QtGui.QMainWindow):
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
         self.lServo.setValue(self.provantSerial.servo.servo[4])
         self.rServo.setValue(self.provantSerial.servo.servo[5])
+        self.horizon.setRoll(self.provantSerial.attitude.y)
+        self.horizon.setPitch(self.provantSerial.attitude.x)
 
     def timerEvent(self, e):
         self.timerCounter += 1
