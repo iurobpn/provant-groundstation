@@ -108,6 +108,11 @@ class Ident:
 	mspversion	=0
 	capability	=0
 
+class RawIMU:
+    gyro = [0,0,0]
+    acc = [0,0,0]
+    mag = [0,0,0]
+
 class Servo:
 	servo		=[None]*8
 

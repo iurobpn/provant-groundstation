@@ -71,7 +71,7 @@ class MainWindow(QtGui.QMainWindow):
     def getDataFromSerial(self):
         self.provantSerial.update()
         self.addArray('Attitude', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
-        self.addArray('Gyro', (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z))
+        self.addArray('Gyro', self.provantSerial.imu.gyro)
         self.addArray('MotorSetpoint', (self.provantSerial.motor.motor[0], self.provantSerial.motor.motor[1]))
         self.addArray('ServoAngle', (self.provantSerial.servo.servo[4], self.provantSerial.servo.servo[5]))
 
