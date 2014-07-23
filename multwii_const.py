@@ -94,13 +94,13 @@ class Status:
 	gccs		=0
 
 class Debug:
-	debug		=[None]*4
+	debug		=[0]*4
 
 class Rc:
-	channel		=[None]*12
+	channel		=[0]*12
 
 class Pid:
-	pid			=[None]*30
+	pid			=[0]*30
 
 class Ident:
 	version		=0
@@ -114,10 +114,10 @@ class RawIMU:
     mag = [0,0,0]
 
 class Servo:
-	servo		=[None]*8
+	servo		=[0]*8
 
 class Motor_pins:
-	pin         =[None]*8
+	pin         =[0]*8
 
 class Motor:
-	motor 		=[None]*8
+	motor 		=[0]*8

@@ -71,6 +71,7 @@ class MainWindow(QtGui.QMainWindow):
                 self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                 self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
         for i in range(len(points)):
+            if points[i]:
                 self.dataSets[datasetName+str(i)].addPoint(points[i])
 
     def setupPlot(self):
@@ -92,8 +93,8 @@ class MainWindow(QtGui.QMainWindow):
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
         self.lServo.setValue(self.provantSerial.servo.servo[4])
         self.rServo.setValue(self.provantSerial.servo.servo[5])
-        self.horizon.setRoll(self.provantSerial.attitude.y)
-        self.horizon.setPitch(self.provantSerial.attitude.x)
+        self.horizon.setRoll(self.provantSerial.attitude.x)
+        self.horizon.setPitch(self.provantSerial.attitude.y)
 
     def timerEvent(self, e):
         self.timerCounter += 1
