@@ -78,9 +78,8 @@ class AttitudeIndicator(Qwt.QwtDial):
         self.setValue(roll)
 
     def setPitch(self,pitch):
-        self.setRoll(self.value()-1)
         self.gradient = pitch/90.0
-        self.setRoll(self.value()+1)
+        self.update()
 
     def __colorTheme(self, base):
         background = base.dark(150)
