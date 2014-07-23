@@ -345,16 +345,99 @@
            </property>
            <layout class="QHBoxLayout" name="lay3"/>
           </widget>
-          <widget class="QWidget" name="verticalLayoutWidget">
+          <widget class="QWidget" name="horizontalLayoutWidget_2">
+           <property name="geometry">
+            <rect>
+             <x>279</x>
+             <y>19</y>
+             <width>291</width>
+             <height>101</height>
+            </rect>
+           </property>
+           <layout class="QHBoxLayout" name="lay4"/>
+          </widget>
+          <widget class="QWidget" name="horizontalLayoutWidget_3">
            <property name="geometry">
             <rect>
              <x>280</x>
-             <y>-1</y>
+             <y>140</y>
              <width>291</width>
-             <height>271</height>
+             <height>171</height>
             </rect>
            </property>
-           <layout class="QVBoxLayout" name="lay4"/>
+           <layout class="QHBoxLayout" name="lay5"/>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_7">
+           <property name="geometry">
+            <rect>
+             <x>110</x>
+             <y>10</y>
+             <width>121</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Attitude</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_8">
+           <property name="geometry">
+            <rect>
+             <x>340</x>
+             <y>0</y>
+             <width>31</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Roll</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_9">
+           <property name="geometry">
+            <rect>
+             <x>480</x>
+             <y>0</y>
+             <width>41</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Pitch</string>
+           </property>
+          </widget>
+          <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel_10">
+           <property name="geometry">
+            <rect>
+             <x>410</x>
+             <y>120</y>
+             <width>41</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Yaw</string>
+           </property>
           </widget>
          </widget>
         </item>

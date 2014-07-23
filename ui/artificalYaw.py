@@ -31,6 +31,7 @@ class YawIndicator(QWidget):
     angleChanged = pyqtSignal(float)
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
+        self.setFixedSize(135,135)
         self._angle = 0.0
         self._margins = 10
         self._pointText = {0: "N", 45: "NE", 90: "E", 135: "SE", 180: "S",
@@ -103,10 +104,10 @@ class YawIndicator(QWidget):
             )
         
         painter.restore()
-    
+    '''
     def sizeHint(self):
-    
-        return QSize(150, 150)
+        return QSize(40, 40)
+    '''
     
     def angle(self):
         return self._angle
