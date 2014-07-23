@@ -32,7 +32,7 @@ class MainWindow(QtGui.QMainWindow):
         #self.Dial = SpeedoMeter(self.frameh_2)
         #print dir(self.frame_2)
         # self.horizon.
-        self.horizon.gradient=-0.1
+        self.horizon.gradient=0
 
 
     def setupSerial(self):
@@ -92,8 +92,8 @@ class MainWindow(QtGui.QMainWindow):
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
         self.lServo.setValue(self.provantSerial.servo.servo[4])
         self.rServo.setValue(self.provantSerial.servo.servo[5])
-        self.horizon.setRoll(self.provantSerial.attitude.y)
-        self.horizon.setPitch(self.provantSerial.attitude.x)
+        self.horizon.setRoll(self.provantSerial.attitude.x)
+        self.horizon.setPitch(self.provantSerial.attitude.y)
 
     def timerEvent(self, e):
         self.timerCounter += 1
