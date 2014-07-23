@@ -9,7 +9,7 @@ class DataSet():
     """
     Class responsible for keeping data points, and creating a curve from them.
     """
-    def __init__(self,window, name):
+    def __init__(self, window, name):
         self.window = window
         self.data = list(zeros(XRANGE, Float)) ##starts Y with zeros
         self.x = arange(0.0, 1000, 0.5)
