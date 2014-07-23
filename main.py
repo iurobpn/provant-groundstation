@@ -8,10 +8,10 @@ from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
 from provant_serial import ProvantSerial
 from ui.artificalHorizon import AttitudeIndicator
+from ui.artificalRoll import RollIndicator
+from ui.artificalPitch import PitchIndicator
+from ui.artificalYaw import YawIndicator
 XRANGE = 500
-
-#just tricking my auto-complete
-arange = arange
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -27,12 +27,21 @@ class MainWindow(QtGui.QMainWindow):
         self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
         self.setupSerial()
         self.timerCounter =0
+
         self.horizon = AttitudeIndicator(self.frame_2)
         self.lay3.addWidget(self.horizon)
+
+        self.attitudeRoll = RollIndicator(self.frame_2)
+        self.lay4.addWidget(self.attitudeRoll)
+
+        self.attitudePitch = PitchIndicator(self.frame_2)
+        self.lay4.addWidget(self.attitudePitch)
+
+        self.attitudeYaw = YawIndicator(self.frame_2)
+        self.lay4.addWidget(self.attitudeYaw)
         #self.Dial = SpeedoMeter(self.frameh_2)
         #print dir(self.frame_2)
         # self.horizon.
-        self.horizon.gradient=0
 
 
     def setupSerial(self):
@@ -95,6 +104,9 @@ class MainWindow(QtGui.QMainWindow):
         self.rServo.setValue(self.provantSerial.servo.servo[5])
         self.horizon.setRoll(self.provantSerial.attitude.x)
         self.horizon.setPitch(self.provantSerial.attitude.y)
+        self.attitudeRoll.setRoll(self.provantSerial.attitude.x)
+        self.attitudePitch.setRoll(-self.provantSerial.attitude.y)
+        self.attitudeYaw.setAngle(self.provantSerial.attitude.z)
 
     def timerEvent(self, e):
         self.timerCounter += 1

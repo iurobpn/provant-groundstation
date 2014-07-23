@@ -56,7 +56,7 @@ class AttitudeIndicatorNeedle(QwtDialNeedle):
         painter.restore()
 
 
-class AttitudeIndicator(Qwt.QwtDial):
+class RollIndicator(Qwt.QwtDial):
 
     def __init__(self, *args):
         self.gradient = 0
