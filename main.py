@@ -38,7 +38,7 @@ class MainWindow(QtGui.QMainWindow):
         self.lay4.addWidget(self.attitudePitch)
 
         self.attitudeYaw = YawIndicator(self.frame_2)
-        self.lay4.addWidget(self.attitudeYaw)
+        self.lay5.addWidget(self.attitudeYaw)
         #self.Dial = SpeedoMeter(self.frameh_2)
         #print dir(self.frame_2)
         # self.horizon.
