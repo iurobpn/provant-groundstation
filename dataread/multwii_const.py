@@ -1,3 +1,5 @@
+__author__ = 'Patrick'
+
 #MSP_HEAD                 ='$','M','>'
 MSP_HEAD                 =36,77,62
 MSP_LIST                 =100-1,120+1,200-1,254+1

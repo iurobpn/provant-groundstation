@@ -6,7 +6,7 @@ from ui.data import DataSet
 import random
 from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
-from provant_serial import ProvantSerial
+from dataread.provant_serial import ProvantSerial
 from ui.artificalHorizon import AttitudeIndicator
 from ui.artificalRoll import RollIndicator
 from ui.artificalPitch import PitchIndicator

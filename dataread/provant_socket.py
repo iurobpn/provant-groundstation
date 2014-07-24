@@ -1,6 +1,6 @@
+__author__ = 'Patrick'
 import socket
 import sys
-
 #a simple test of a class that listen a socket server
 #need an update with vinicius
 class ProvantSocket:
