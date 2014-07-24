@@ -108,17 +108,20 @@ class MainWindow(QtGui.QMainWindow):
     def getDataFromSerial(self):
         self.provantSerial.update()
         self.addArray('Attitude',
-                      (self.provantSerial.attitude.x, self.provantSerial.attitude.y, self.provantSerial.attitude.z),
+                      (self.provantSerial.attitude.roll, self.provantSerial.attitude.pitch, self.provantSerial.attitude.yaw),
                       ('Roll','Pitch','Yaw'))
 
-        self.addArray('Gyro', self.provantSerial.imu.gyro)
+        self.addArray('Gyr', self.provantSerial.imu.gyr,('X','Y','Z'))
+        self.addArray('Acc', self.provantSerial.imu.acc,('X','Y','Z'))
+        self.addArray('Mag', self.provantSerial.imu.mag,('X','Y','Z'))
 
         self.addArray('MotorSetpoint',
-                      (self.provantSerial.motor.motor[0], self.provantSerial.motor.motor[1]),
+                      self.provantSerial.motor.motor[0:2],
                       ('Lmotor','Rmotor'))
 
         self.addArray('ServoAngle',
-                      (self.provantSerial.servo.servo[4],self.provantSerial.servo.servo[5]))
+                      self.provantSerial.servo.servo[4:6],
+                      ('LServoAngle','RServoAngle'))
 
     def updateData(self):
         self.getDataFromSerial()
@@ -129,11 +132,11 @@ class MainWindow(QtGui.QMainWindow):
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
         self.lServo.setValue(self.provantSerial.servo.servo[4])
         self.rServo.setValue(self.provantSerial.servo.servo[5])
-        self.horizon.setRoll(self.provantSerial.attitude.x)
-        self.horizon.setPitch(self.provantSerial.attitude.y)
-        self.attitudeRoll.setRoll(self.provantSerial.attitude.x)
-        self.attitudePitch.setRoll(-self.provantSerial.attitude.y)
-        self.attitudeYaw.setAngle(self.provantSerial.attitude.z)
+        self.horizon.setRoll(self.provantSerial.attitude.roll)
+        self.horizon.setPitch(self.provantSerial.attitude.pitch)
+        self.attitudeRoll.setRoll(self.provantSerial.attitude.roll)
+        self.attitudePitch.setRoll(-self.provantSerial.attitude.pitch)
+        self.attitudeYaw.setAngle(self.provantSerial.attitude.yaw)
 
     def timerEvent(self, e):
         self.timerCounter += 1

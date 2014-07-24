@@ -68,9 +68,9 @@ class ProvantSerial:
             for x in xrange(0, self.size):
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
-                self.attitude.x = self.decode16(self.L[0:2])/10
-                self.attitude.y = self.decode16(self.L[2:4])/10
-                self.attitude.z = self.decode16(self.L[4:6])/10
+                self.attitude.roll = self.decode16(self.L[0:2])/10
+                self.attitude.pitch = self.decode16(self.L[2:4])/10
+                self.attitude.yaw = self.decode16(self.L[4:6])/10
                 '''
                 print("attitude",self.attitude.x,self.attitude.y,self.attitude.z)
             else:
@@ -257,9 +257,9 @@ class ProvantSerial:
                 check ^= ord(self.L[x])
             if (check == ord(self.L[self.size])):
                 for i in range(3):
-                    self.imu.gyro[i] = self.decode16(self.L[i*2:i*2+2])
+                    self.imu.acc[i] = self.decode16(self.L[i*2:i*2+2])
                 for i in range(3, 6):
-                    self.imu.acc[i-3] = self.decode16(self.L[i*2:i*2+2])
+                    self.imu.gyr[i-3] = self.decode16(self.L[i*2:i*2+2])
                 for i in range(6, 9):
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
 
@@ -285,7 +285,7 @@ if __name__ == '__main__':
 
     while (1):
         provant.update()
-        print("attitude", provant.attitude.x, provant.attitude.y, provant.attitude.z)
+        print("attitude", provant.attitude.roll, provant.attitude.pitch, provant.attitude.yaw)
         print("gps raw", provant.raw_gps.fix, provant.raw_gps.numsats, provant.raw_gps.lat, provant.raw_gps.lon,
               provant.raw_gps.alt, provant.raw_gps.speed, provant.raw_gps.ggc)
         print("gps comp", provant.comp_gps.distance, provant.comp_gps.direction, provant.comp_gps.update)
@@ -297,7 +297,7 @@ if __name__ == '__main__':
         print("rc", provant.rc.channel)
         print("pid", provant.pid.pid)
         print("ident", provant.ident.version, provant.ident.multtype, provant.ident.mspversion, provant.ident.capability)
-        print("imu:", provant.imu.gyro,provant.imu.acc,provant.imu.mag)
+        print("imu:", provant.imu.gyr,provant.imu.acc,provant.imu.mag)
         print("servo", provant.servo.servo)
         print("motor pins", provant.motor_pins.pin)
         print("motor", provant.motor.motor)

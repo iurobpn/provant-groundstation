@@ -58,9 +58,9 @@ MSP_MOTOR_SIZE           =16
 
 
 class Attitude:
-	x 			=0
-	y 			=0
-	z 			=0
+	roll		=0
+	pitch		=0
+	yaw			=0
 
 class Raw_gps:
 	fix     	=0
@@ -109,7 +109,7 @@ class Ident:
 	capability	=0
 
 class RawIMU:
-    gyro = [0,0,0]
+    gyr = [0,0,0]
     acc = [0,0,0]
     mag = [0,0,0]
 
