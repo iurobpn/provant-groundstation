@@ -11,6 +11,7 @@ from ui.artificalHorizon import AttitudeIndicator
 from ui.artificalRoll import RollIndicator
 from ui.artificalPitch import PitchIndicator
 from ui.artificalYaw import YawIndicator
+
 XRANGE = 500
 
 class MainWindow(QtGui.QMainWindow):
@@ -45,7 +46,11 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def setupSerial(self):
+        #assert isinstance(self.serialList,QtGui.QComboBox) #hint for pycharm code-completion
+        actual = self.serialList.currentText()
         self.serialList.clear()
+        self.serialList.addItem(actual)
+
         for serial in list_serial_ports():
             self.serialList.addItem(serial)
         self.serialConnect.clicked.connect(self.connectToSerial)
@@ -134,7 +139,7 @@ class MainWindow(QtGui.QMainWindow):
         self.timerCounter += 1
         if self.provantSerial:
             self.updateData()
-        elif (self.timerCounter % 1000) == 1:
+        elif (self.timerCounter % 100) == 1:
             self.setupSerial()
 
 
