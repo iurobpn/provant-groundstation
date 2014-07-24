@@ -6,7 +6,7 @@ __author__ = 'will'
 import PyQt4.Qwt5 as Qwt
 from PyQt4.Qwt5 import QwtDial,QwtDialNeedle,qwtPolar2Pos
 from PyQt4.QtGui import QPalette
-from PyQt4.Qt import QPoint, QPolygon, QPen, QColor, Qt, QRegion,QSizePolicy
+from PyQt4.Qt import QPoint, QPolygon, QPen, QColor, Qt, QString
 from PyQt4.QtCore import qRound
 import math
 from math import pi as M_PI
@@ -39,21 +39,9 @@ class AttitudeIndicatorNeedle(QwtDialNeedle):
         self.setPalette(palette)
 
     def draw(self, painter, center, length, direction, cg):
-        direction1 = direction * M_PI / 180.0
-        triangleSize = qRound(length * 0.1)
-        painter.save()
-        p0 = (QPoint(center.x() + 0, center.y() + 0))
-        p1 = qwtPolar2Pos(p0, length - 2 * triangleSize - 2, direction1)
-        pa = QPolygon(3)
-        pa.setPoint(0, qwtPolar2Pos(p1, 2 * triangleSize, direction1))
-        pa.setPoint(1, qwtPolar2Pos(p1, triangleSize, direction1 + M_PI_2))
-        pa.setPoint(2, qwtPolar2Pos(p1, triangleSize, direction1 - M_PI_2))
         color = self.palette().color(cg, QPalette.Text)
         painter.setBrush(color)
-        painter.drawPolygon(pa)
         painter.setPen(QPen(color, 3))
-        painter.drawLine(qwtPolar2Pos(p0, length - 2, direction1 + M_PI_2), qwtPolar2Pos(p0, length - 2, direction1 - M_PI_2))
-        painter.restore()
 
 
 class PitchIndicator(Qwt.QwtDial):
@@ -133,35 +121,36 @@ class PitchIndicator(Qwt.QwtDial):
     # keyPressEvent()
 
     def drawScale(self, painter, center, radius, origin, minArc, maxArc):
-        dir = (360.0 - origin) * math.pi / 180.0
-        offset = 4
-        p0 = Qwt.qwtPolar2Pos(center, offset, dir + math.pi)
-
-        w = self.contentsRect().width()
-
-        # clip region to swallow 180 - 360 degrees
-        pa = []
-        pa.append(Qwt.qwtPolar2Pos(p0, w, dir - math.pi/2))
-        pa.append(Qwt.qwtPolar2Pos(pa[-1], 2 * w, dir + math.pi/2))
-        pa.append(Qwt.qwtPolar2Pos(pa[-1], w, dir))
-        pa.append(Qwt.qwtPolar2Pos(pa[-1], 2 * w, dir - math.pi/2))
-
-        painter.save()
-        painter.setClipRegion(QRegion(QPolygon(pa)))
-        Qwt.QwtDial.drawScale(
-            self, painter, center, radius, origin, minArc, maxArc)
-        painter.restore()
-
-    # drawScale()
+        # p0 = (QPoint(center.x() + 0, center.y() + 0))
+        # p1 = qwtPolar2Pos(p0, radius+30, -M_PI/2)
+        # painter.drawText(p1, "angle")
+        pass
 
     def drawScaleContents(self, painter, center, radius):
-        dir = 360 - int(round(self.origin() - self.value()))
-        arc = 90 + int(round(self.gradient * 90))
+        dir = 90#360 - int(roud(self.origin() - self.value()))
+        arc = 90 #+ int(round(self.gradient * 90))
         skyColor = QColor(38, 151, 221)
         painter.save()
         painter.setBrush(skyColor)
         painter.drawChord(
             self.scaleContentsRect(), (dir - arc)*16, 2*arc*16)
+
+        direction1 = self.value() * M_PI / 180.0
+        triangleSize = qRound(radius * 0.15)
+        # painter.save()
+        p0 = (QPoint(center.x() + 0, center.y() + 0))
+        p1 = qwtPolar2Pos(p0, radius - 2 * triangleSize - 2, direction1)
+        pa = QPolygon(3)
+        pa.setPoint(0, qwtPolar2Pos(p1, 2 * triangleSize, direction1))
+        pa.setPoint(1, qwtPolar2Pos(p1, triangleSize, direction1 + M_PI_2))
+        pa.setPoint(2, qwtPolar2Pos(p1, triangleSize, direction1 - M_PI_2))
+        color = self.palette().color(QPalette.Text)
+        painter.setBrush(color)
+        painter.drawPolygon(pa)
+        painter.setPen(QPen(color, 3))
+        painter.drawLine(qwtPolar2Pos(p0, radius - 16, direction1), qwtPolar2Pos(p0, radius - 3, direction1 - M_PI))
+
+        # painter.restore()
         painter.restore()
 
     # drawScaleContents()
