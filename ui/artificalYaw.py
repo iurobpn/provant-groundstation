@@ -8,6 +8,7 @@ from PyQt4.Qwt5 import *
 from PyQt4.QtGui import *
 from PyQt4.Qt import *
 from PyQt4.QtCore import *
+from PyQt4 import QtGui
 import math
 from math import pi as M_PI
 
@@ -62,7 +63,7 @@ class YawIndicator(QWidget):
         metrics = QFontMetricsF(font)
         
         painter.setFont(font)
-        painter.setPen(self.palette().color(QPalette.Shadow))
+        painter.setPen(self.palette().color(QPalette.Text))
         
         i = 0
         while i < 360:
@@ -96,7 +97,7 @@ class YawIndicator(QWidget):
                       QPoint(0, 45), QPoint(-10, 0)])
             )
         
-        painter.setBrush(self.palette().brush(QPalette.Highlight))
+        painter.setBrush(QtGui.QColor(220, 0, 0))
         
         painter.drawPolygon(
             QPolygon([QPoint(-5, -25), QPoint(0, -45), QPoint(5, -25),
