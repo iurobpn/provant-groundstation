@@ -11,6 +11,7 @@ from ui.artificalHorizon import AttitudeIndicator
 from ui.artificalRoll import RollIndicator
 from ui.artificalPitch import PitchIndicator
 from ui.artificalYaw import YawIndicator
+from dataPersistency.csvRecorder import CsvRecorder
 
 XRANGE = 500
 
@@ -24,8 +25,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setupPlot()
         self.dataSets = {}
         self.provantSerial = None
-        legend = Qwt.QwtLegend()
-        self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
+        #legend = Qwt.QwtLegend()
+        #self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
         self.setupSerial()
         self.timerCounter =0
 
@@ -40,6 +41,31 @@ class MainWindow(QtGui.QMainWindow):
 
         self.attitudeYaw = YawIndicator(self.frame_2)
         self.lay5.addWidget(self.attitudeYaw)
+        self.setupMenu()
+
+    def setupMenu(self):
+        self.currentFile = None
+        self.actionSave.setShortcut('Ctrl+S')
+        self.actionSave.setStatusTip('Save new File')
+        self.actionSave.triggered.connect(self.saveFile)
+        self.actionSave_as.triggered.connect(self.saveFileAs)
+        self.actionClose.triggered.connect(QtGui.QApplication.exit)
+
+    def saveFileAs(self):
+        self.currentFile = None
+        self.saveFile()
+
+    def saveFile(self):
+        writer = CsvRecorder()
+        if not self.currentFile:
+            self.currentFile = QtGui.QFileDialog.getSaveFileName(self, 'Save file','/home')
+        try:
+            writer.writeDataToFile(self.dataSets, self.currentFile)
+            QtGui.QMessageBox.about(self, "","Success!")
+        except Exception, e:
+            self.currentFile = None
+            QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
+
 
 
     def setupSerial(self):
