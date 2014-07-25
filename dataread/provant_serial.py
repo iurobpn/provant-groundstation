@@ -85,11 +85,11 @@ class ProvantSerial:
                 self.attitude.roll = self.decode16(self.L[0:2])/10
                 self.attitude.pitch = self.decode16(self.L[2:4])/10
                 self.attitude.yaw = self.decode16(self.L[4:6])/10
-                '''
-                self.window.addArray('Attitude',
-                                     (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
-                                     ('Roll','Pitch','Yaw'))
-                '''
+                if self.window:
+                    self.window.addArray('Attitude',
+                                         (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
+                                         ('Roll','Pitch','Yaw'))
+
 
 
         if (self.who == MSP_RAW_GPS):
@@ -157,11 +157,11 @@ class ProvantSerial:
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.servo.servo[x] = self.decode16(self.L[x*2:x*2+2])
-                    '''
-                self.window.addArray('ServoAngle',
-                                     self.servo.servo[4:6],
-                                     ('LServoAngle','RServoAngle'))
-'''
+                if self.window:
+                    self.window.addArray('ServoAngle',
+                                         self.servo.servo[4:6],
+                                         ('LServoAngle','RServoAngle'))
+
 
         if (self.who == MSP_MOTOR_PINS):
             if self.checksum_matches():
@@ -177,30 +177,44 @@ class ProvantSerial:
                     self.imu.gyr[i-3] = self.decode16(self.L[i*2:i*2+2])
                 for i in range(6, 9):
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
-                '''
-                self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
-                self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
-                self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
-                '''
+
+                if self.window:
+                    self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
+                    self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
+                    self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
+
         if (self.who == MSP_MOTOR):
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.motor.motor[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-                '''
-                self.window.addArray('MotorSetpoint',
-                                     self.motor.motor[0:2],
-                                     ('Lmotor','Rmotor'))
-                '''
+
+                if self.window:
+                    self.window.addArray('MotorSetpoint',
+                                         self.motor.motor[0:2],
+                                         ('Lmotor', 'Rmotor'))
+
+
+
         if (self.who == MSP_CONTROLDATAIN):
             if self.checksum_matches():
                 for x in xrange(0, 3):
-                    self.controldatain.rpy[x]=self.decodeFloat(self.L[x*4:4+x*4])
+                    self.controldatain.rpy[x]= self.decodeFloat(self.L[x*4:4+x*4])
                 for x in xrange(3, 6):
-                    self.controldatain.drpy[x-3]=self.decodeFloat(self.L[x*4:4+x*4])
+                    self.controldatain.drpy[x-3]= self.decodeFloat(self.L[x*4:4+x*4])
                 for x in xrange(6, 9):
-                    self.controldatain.position[x-6]=self.decodeFloat(self.L[x*4:4+x*4])
+                    self.controldatain.position[x-6]= self.decodeFloat(self.L[x*4:4+x*4])
                 for x in xrange(9, 12):
-                    self.controldatain.velocity[x-9]=self.decodeFloat(self.L[x*4:4+x*4])
+                    self.controldatain.velocity[x-9]= self.decodeFloat(self.L[x*4:4+x*4])
+                if self.window:
+                    data = self.controldatain
+                    self.window.addArray("Datarpy",
+                                         data.rpy,)
+                    self.window.addArray("Datadrpy",
+                                         data.drpy,)
+                    self.window.addArray("DataPosition",
+                                         data.position,)
+                    self.window.addArray("DataVelocity",
+                                         data.velocity,)
 
         if (self.who == MSP_CONTROLDATAOUT):
             if self.checksum_matches():
@@ -210,16 +224,26 @@ class ProvantSerial:
                 self.controldataout.servoRight = self.decodeFloat(self.L[12:16])
                 self.controldataout.escRightNewtons = self.decodeFloat(self.L[16:20])
                 self.controldataout.escRightSpeed = self.decodeFloat(self.L[20:24])
+                if self.window:
+                    data = self.controldataout
+                    self.window.addArray("LeftActuatorsCommand",
+                                         (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
+                                         ('Newtons', 'Speed', 'Servo'))
+                    self.window.addArray("RightActuatorsCommand",
+                                         (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
+                                         ('Newtons', 'Speed', 'Servo'))
 
         if (self.who == MSP_ESCDATA):
             if self.checksum_matches():
-                for x in xrange(0,2):
-                    self.escdata.rpm[x]  = self.decode16(self.L[x*10:x*10+2])
-                    self.escdata.current[x]  = self.decodeFloat(self.L[x*10+2:x*10+6])
-                    self.escdata.voltage[x]  = self.decodeFloat(self.L[x*10+6:x*10+10])
-
-                    
-
+                for x in xrange(0, 2):
+                    self.escdata.rpm[x] = self.decode16(self.L[x*10:x*10+2])
+                    self.escdata.current[x] = self.decodeFloat(self.L[x*10+2:x*10+6])
+                    self.escdata.voltage[x] = self.decodeFloat(self.L[x*10+6:x*10+10])
+                if self.window:
+                    for i, escName in enumerate(['EscFeedbackLeft', 'EscFeedbackRight']):
+                        self.window.addArray(escName,
+                                             (self.escdata.rpm[i], self.escdata.current[i], self.escdata.voltage[i]),
+                                             ('Rpm', 'Current', 'Voltage'))
 
 if __name__ == '__main__':
     provant = ProvantSerial()

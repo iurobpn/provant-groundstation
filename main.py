@@ -105,7 +105,7 @@ class MainWindow(QtGui.QMainWindow):
                 self.addDataTree(datasetName, len(points),setnames)
                 for i in range(len(points)):
                     datasetName_ = datasetName+setnames[i]
-                    print datasetName_
+                    #print datasetName_
                     self.dataSets[datasetName_] = DataSet(self, datasetName_)
                     self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                     self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
@@ -113,17 +113,17 @@ class MainWindow(QtGui.QMainWindow):
                 if points[i] != None:
                     self.dataSets[datasetName+setnames[i]].addPoint(points[i])
         else:
-            datasetName_ = datasetName + str(0)
+            datasetName_ = datasetName +  '['+str(0)+']'
             if datasetName_ not in self.dataSets:
                 self.addDataTree(datasetName, len(points))
                 for i in range(len(points)):
-                    datasetName_ = datasetName+str(i)
+                    datasetName_ = datasetName + '['+str(i)+']'
                     self.dataSets[datasetName_] = DataSet(self, datasetName_)
                     self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                     self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
             for i in range(len(points)):
                 if points[i]:
-                    self.dataSets[datasetName+str(i)].addPoint(points[i])
+                    self.dataSets[datasetName + '['+str(i)+']'].addPoint(points[i])
 
     def setupPlot(self):
         self.startTimer(50)
@@ -160,7 +160,7 @@ class MainWindow(QtGui.QMainWindow):
         self.treeWidget.header().setResizeMode(1, QtGui.QHeaderView.Fixed)
         self.treeWidget.header().setResizeMode(2, QtGui.QHeaderView.Fixed)
         self.treeWidget.header().setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
-        self.treeWidget.setColumnWidth(1, 40)
+        self.treeWidget.setColumnWidth(1, 30)
 
     def addDataTree(self, data, children_number,setnames = None):
         if setnames:
@@ -172,7 +172,7 @@ class MainWindow(QtGui.QMainWindow):
         else:
             parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
             for i in range(children_number):
-                CustomTreeItem(self, parent, data+str(i))
+                CustomTreeItem(self, parent, data + '['+str(i)+']')
             self.treeWidget.resizeColumnToContents(2)
 
     def addSingleData(self, name):
