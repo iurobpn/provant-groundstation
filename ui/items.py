@@ -57,5 +57,4 @@ class CustomTreeItem(QtGui.QTreeWidgetItem):
             self.window.disablePlot(self._name)
 
     def colorChanged(self):
-        print 'color changed'
         self.window.setPlotColor(self._name, self.colorChooser.color())
