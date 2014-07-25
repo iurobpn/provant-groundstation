@@ -3,12 +3,15 @@
 # 
 __author__ = 'Patrick'
 import serial
+import struct
+import sys
 from multwii_const import *
+from provant_const import *
 
 
 
 class ProvantSerial:
-    def __init__(self,window = None, serial_name='/dev/ttyUSB11', baudrate_value=460800, debug_mode=False):
+    def __init__(self,window = None, serial_name='/dev/ttyVirtual2', baudrate_value=460800, debug_mode=False):
         ser = serial.Serial(serial_name, baudrate_value)
         ser.flush()
         self.window = window
@@ -28,7 +31,12 @@ class ProvantSerial:
         self.motor_pins = Motor_pins()
         self.motor = Motor()
         self.imu = RawIMU()
+        self.controldatain = Controldatain()
+        self.controldataout = Controldataout()
+        self.escdata = Escdata()
 
+    def decodeFloat(self, data):
+        return struct.unpack('<f', ''.join(data))[0]
 
     def decode32(self, data):
         #print data
@@ -77,9 +85,11 @@ class ProvantSerial:
                 self.attitude.roll = self.decode16(self.L[0:2])/10
                 self.attitude.pitch = self.decode16(self.L[2:4])/10
                 self.attitude.yaw = self.decode16(self.L[4:6])/10
+                '''
                 self.window.addArray('Attitude',
                                      (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
                                      ('Roll','Pitch','Yaw'))
+                '''
 
 
         if (self.who == MSP_RAW_GPS):
@@ -130,7 +140,6 @@ class ProvantSerial:
                     self.rc.channel[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
 
         if (self.who == MSP_PID):
-            print("PID!")
             if self.checksum_matches():
                 for x in xrange(0, self.size):
                     self.pid.pid[x] = ord(self.L[x])
@@ -148,9 +157,11 @@ class ProvantSerial:
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.servo.servo[x] = self.decode16(self.L[x*2:x*2+2])
+                    '''
                 self.window.addArray('ServoAngle',
                                      self.servo.servo[4:6],
                                      ('LServoAngle','RServoAngle'))
+'''
 
         if (self.who == MSP_MOTOR_PINS):
             if self.checksum_matches():
@@ -166,20 +177,48 @@ class ProvantSerial:
                     self.imu.gyr[i-3] = self.decode16(self.L[i*2:i*2+2])
                 for i in range(6, 9):
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
-
+                '''
                 self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
                 self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
                 self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
-
-
+                '''
         if (self.who == MSP_MOTOR):
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.motor.motor[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-
+                '''
                 self.window.addArray('MotorSetpoint',
                                      self.motor.motor[0:2],
                                      ('Lmotor','Rmotor'))
+                '''
+        if (self.who == MSP_CONTROLDATAIN):
+            if self.checksum_matches():
+                for x in xrange(0, 3):
+                    self.controldatain.rpy[x]=self.decodeFloat(self.L[x*4:4+x*4])
+                for x in xrange(3, 6):
+                    self.controldatain.drpy[x-3]=self.decodeFloat(self.L[x*4:4+x*4])
+                for x in xrange(6, 9):
+                    self.controldatain.position[x-6]=self.decodeFloat(self.L[x*4:4+x*4])
+                for x in xrange(9, 12):
+                    self.controldatain.velocity[x-9]=self.decodeFloat(self.L[x*4:4+x*4])
+
+        if (self.who == MSP_CONTROLDATAOUT):
+            if self.checksum_matches():
+                self.controldataout.servoLeft = self.decodeFloat(self.L[0:4])
+                self.controldataout.escLeftNewtons = self.decodeFloat(self.L[4:8])
+                self.controldataout.escLeftSpeed = self.decodeFloat(self.L[8:12])
+                self.controldataout.servoRight = self.decodeFloat(self.L[12:16])
+                self.controldataout.escRightNewtons = self.decodeFloat(self.L[16:20])
+                self.controldataout.escRightSpeed = self.decodeFloat(self.L[20:24])
+
+        if (self.who == MSP_ESCDATA):
+            if self.checksum_matches():
+                for x in xrange(0,2):
+                    self.escdata.rpm[x]  = self.decode16(self.L[x*10:x*10+2])
+                    self.escdata.current[x]  = self.decodeFloat(self.L[x*10+2:x*10+6])
+                    self.escdata.voltage[x]  = self.decodeFloat(self.L[x*10+6:x*10+10])
+
+                    
 
 
 if __name__ == '__main__':
@@ -203,3 +242,6 @@ if __name__ == '__main__':
         print("servo", provant.servo.servo)
         print("motor pins", provant.motor_pins.pin)
         print("motor", provant.motor.motor)
+        print("controldatain",provant.controldatain.rpy,provant.controldatain.drpy,provant.controldatain.position,provant.controldatain.velocity )
+        print("controldataout",provant.controldataout.servoLeft,provant.controldataout.escLeftNewtons,provant.controldataout.escLeftSpeed,provant.controldataout.servoRight,provant.controldataout.escRightNewtons,provant.controldataout.escRightSpeed)
+        print("escdata",provant.escdata.rpm,provant.escdata.current,provant.escdata.voltage)
