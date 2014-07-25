@@ -8,9 +8,10 @@ from multwii_const import *
 
 
 class ProvantSerial:
-    def __init__(self, serial_name='/dev/ttyUSB11', baudrate_value=460800, debug_mode=False):
+    def __init__(self,window = None, serial_name='/dev/ttyUSB11', baudrate_value=460800, debug_mode=False):
         ser = serial.Serial(serial_name, baudrate_value)
         ser.flush()
+        self.window = window
         self.ser = ser
         self.debug = debug_mode
         self.attitude = Attitude()
@@ -45,6 +46,11 @@ class ProvantSerial:
             result -= 2**16
         return result
 
+    def checksum_matches(self):
+        check = self.who ^ self.size
+        for x in xrange(0, self.size):
+            check ^= ord(self.L[x])
+        return (check == ord(self.L[self.size]))
 
     def update(self):
         while self.ser.inWaiting() > 10:
@@ -63,27 +69,21 @@ class ProvantSerial:
         self.L = list(self.word)  # passa para uma lista
         self.takeData()
 
+###############  PROPER MESSAGE DECODING IS HERE ##################################
+
     def takeData(self):
         if (self.who == MSP_ATTITUDE):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.attitude.roll = self.decode16(self.L[0:2])/10
                 self.attitude.pitch = self.decode16(self.L[2:4])/10
                 self.attitude.yaw = self.decode16(self.L[4:6])/10
-                '''
-                print("attitude",self.attitude.x,self.attitude.y,self.attitude.z)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
+                self.window.addArray('Attitude',
+                                     (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
+                                     ('Roll','Pitch','Yaw'))
+
 
         if (self.who == MSP_RAW_GPS):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.raw_gps.fix = ord(self.L[0])
                 self.raw_gps.numsats = ord(self.L[1])
                 self.raw_gps.lat = self.decode32(self.L[2:6])
@@ -91,172 +91,75 @@ class ProvantSerial:
                 self.raw_gps.alt = self.decode16(self.L[10:12])
                 self.raw_gps.speed = self.decode16(self.L[12:14])
                 self.raw_gps.ggc = self.decode16(self.L[14:16])
-                '''
-                print("gps raw",self.raw_gps.fix,self.raw_gps.numsats,self.raw_gps.lat,self.raw_gps.lon,self.raw_gps.alt,self.raw_gps.speed,self.raw_gps.ggc)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
 
         if (self.who == MSP_COMP_GPS):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.comp_gps.distance = self.decode16(self.L[0:2])
                 self.comp_gps.direction = self.decode16(self.L[2:4])
                 self.comp_gps.update = ord(self.L[4])
-            '''
-                print("gps comp",self.comp_gps.distance,self.comp_gps.direction,self.comp_gps.update)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-            '''
 
         if (self.who == MSP_ANALOG):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.analog.vbat = ord(self.L[0])
                 self.analog.power = self.decode16(self.L[1:3])
                 self.analog.rssi = self.decode16(self.L[3:5])
                 self.analog.current = self.decode16(self.L[5:7])
-            '''
-                print("analog",self.analog.vbat,self.analog.power,self.analog.rssi,self.analog.current)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-            '''
 
         if (self.who == MSP_ALTITUDE):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.altitude.alt = self.decode32(self.L[0:4])
                 self.altitude.vario = self.decode16(self.L[4:6])
-            '''
-                print("altitude",self.altitude.alt,self.altitude.vario)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-            '''
+
 
         if (self.who == MSP_STATUS):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.status.cycleTime = self.decode16(self.L[0:2])
                 self.status.i2cec = self.decode16(self.L[2:4])
                 self.status.sensor = self.decode16(self.L[4:6])
                 self.status.flag = self.decode32(self.L[6:10])
                 self.status.gccs = ord(self.L[10])
-            '''
-                print("status",self.status.cycleTime,self.status.i2cec,self.status.sensor,self.status.flag,self.status.gccs)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-            '''
 
         if (self.who == MSP_DEBUG):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
-                debug = [None] * (self.size / 2)
+            if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.debug.debug[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-                '''
-                print("debug",self.debug.debug)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
 
         if (self.who == MSP_RC):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
-                channel = [None] * (self.size / 2)
+            if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.rc.channel[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-                '''
-                print("rc",self.rc.channel)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
 
         if (self.who == MSP_PID):
             print("PID!")
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
-                pid = [None] * self.size
+            if self.checksum_matches():
                 for x in xrange(0, self.size):
                     self.pid.pid[x] = ord(self.L[x])
-                print("pid", self.pid.pid)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]), check)
+
 
         if (self.who == MSP_IDENT):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 self.ident.version = ord(self.L[0])
                 self.ident.multtype = ord(self.L[1])
                 self.ident.mspversion = ord(self.L[2])
                 self.ident.capability = ord(self.L[3]) + (ord(self.L[4]) << 8) + (ord(self.L[5]) << 16) + (
                 ord(self.L[6]) << 24)
-                '''
-                print("ident",self.ident.version,self.ident.multtype,self.ident.mspversion,self.ident.capability)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
 
         if (self.who == MSP_SERVO):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
-                servo = [None] * (self.size / 2)
+            if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.servo.servo[x] = self.decode16(self.L[x*2:x*2+2])
-                '''
-                print("servo",self.servo.servo)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
+                self.window.addArray('ServoAngle',
+                                     self.servo.servo[4:6],
+                                     ('LServoAngle','RServoAngle'))
 
         if (self.who == MSP_MOTOR_PINS):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 pins = [None] * (self.size)
                 for x in xrange(0, self.size):
                     self.motor_pins.pin[x] = ord(self.L[x])
-                '''
-                print("motor pins",self.motor_pins.pin)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
 
         if (self.who == MSP_RAW_IMU):
-            check = self.who ^ self.size
-            #print "imu" , self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
+            if self.checksum_matches():
                 for i in range(3):
                     self.imu.acc[i] = self.decode16(self.L[i*2:i*2+2])
                 for i in range(3, 6):
@@ -264,21 +167,19 @@ class ProvantSerial:
                 for i in range(6, 9):
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
 
+                self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
+                self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
+                self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
+
 
         if (self.who == MSP_MOTOR):
-            check = self.who ^ self.size
-            for x in xrange(0, self.size):
-                check ^= ord(self.L[x])
-            if (check == ord(self.L[self.size])):
-                motor = [None] * (self.size / 2)
+            if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.motor.motor[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-                '''
-                print("motor",self.motor.motor)
-            else:
-                print("checksum error !")
-                print(ord(self.L[self.size]),check)
-                '''
+
+                self.window.addArray('MotorSetpoint',
+                                     self.motor.motor[0:2],
+                                     ('Lmotor','Rmotor'))
 
 
 if __name__ == '__main__':

@@ -40,9 +40,6 @@ class MainWindow(QtGui.QMainWindow):
 
         self.attitudeYaw = YawIndicator(self.frame_2)
         self.lay5.addWidget(self.attitudeYaw)
-        #self.Dial = SpeedoMeter(self.frameh_2)
-        #print dir(self.frame_2)
-        # self.horizon.
 
 
     def setupSerial(self):
@@ -57,7 +54,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def connectToSerial(self):
         try:
-            self.setSerial(ProvantSerial(serial_name=str(self.serialList.currentText())))
+            self.setSerial(ProvantSerial(window= self,serial_name=str(self.serialList.currentText())))
             self.serialStatus.setText('OK!')
         except Exception, e:
             self.serialStatus.setText("ERROR!")
@@ -107,21 +104,6 @@ class MainWindow(QtGui.QMainWindow):
 
     def getDataFromSerial(self):
         self.provantSerial.update()
-        self.addArray('Attitude',
-                      (self.provantSerial.attitude.roll, self.provantSerial.attitude.pitch, self.provantSerial.attitude.yaw),
-                      ('Roll','Pitch','Yaw'))
-
-        self.addArray('Gyr', self.provantSerial.imu.gyr,('X','Y','Z'))
-        self.addArray('Acc', self.provantSerial.imu.acc,('X','Y','Z'))
-        self.addArray('Mag', self.provantSerial.imu.mag,('X','Y','Z'))
-
-        self.addArray('MotorSetpoint',
-                      self.provantSerial.motor.motor[0:2],
-                      ('Lmotor','Rmotor'))
-
-        self.addArray('ServoAngle',
-                      self.provantSerial.servo.servo[4:6],
-                      ('LServoAngle','RServoAngle'))
 
     def updateData(self):
         self.getDataFromSerial()
