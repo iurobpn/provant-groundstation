@@ -66,8 +66,6 @@ class MainWindow(QtGui.QMainWindow):
             self.currentFile = None
             QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
 
-
-
     def setupSerial(self):
         #assert isinstance(self.serialList,QtGui.QComboBox) #hint for pycharm code-completion
         actual = self.serialList.currentText()

@@ -133,6 +133,8 @@ class ProvantSerial:
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.debug.debug[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
+                self.window.addArray('Debug', self.debug.debug)
+
 
         if (self.who == MSP_RC):
             if self.checksum_matches():
