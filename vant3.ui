@@ -179,7 +179,7 @@
             <string>%v</string>
            </property>
           </widget>
-          <widget class="QProgressBar" name="lMotorRpm_2">
+          <widget class="QProgressBar" name="rMotorRpm">
            <property name="geometry">
             <rect>
              <x>210</x>

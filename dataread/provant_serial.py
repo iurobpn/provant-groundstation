@@ -194,6 +194,8 @@ class ProvantSerial:
                     self.window.addArray('MotorSetpoint',
                                          self.motor.motor[0:2],
                                          ('Lmotor', 'Rmotor'))
+                    self.window.lMotorSetpoint.setValue(self.motor.motor[0])
+                    self.window.rMotorSetpoint.setValue(self.motor.motor[1])
 
 
 
@@ -246,6 +248,8 @@ class ProvantSerial:
                         self.window.addArray(escName,
                                              (self.escdata.rpm[i], self.escdata.current[i], self.escdata.voltage[i]),
                                              ('Rpm', 'Current', 'Voltage'))
+                    self.window.lMotorRpm.setValue(self.escdata.rpm[0])
+                    self.window.rMotorRpm.setValue(self.escdata.rpm[1])
 
 if __name__ == '__main__':
     provant = ProvantSerial()
