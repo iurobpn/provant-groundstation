@@ -147,6 +147,17 @@ class PitchIndicator(Qwt.QwtDial):
         color = self.palette().color(QPalette.Text)
         painter.setBrush(color)
         painter.drawPolygon(pa)
+
+        p0 = (QPoint(center.x() + 0, center.y() + 0))
+        p1 = qwtPolar2Pos(p0, radius - 2 * triangleSize + 21, 0)
+        pa = QPolygon(3)
+        pa.setPoint(0, qwtPolar2Pos(p1, -1.6 * triangleSize, 0))
+        pa.setPoint(1, qwtPolar2Pos(p1, triangleSize, 0 + M_PI_2))
+        pa.setPoint(2, qwtPolar2Pos(p1, triangleSize, 0 - M_PI_2))
+        color = self.palette().color(QPalette.Text)
+        painter.setBrush(color)
+        painter.drawPolygon(pa)
+
         painter.setPen(QPen(color, 3))
         painter.drawLine(qwtPolar2Pos(p0, radius - 16, direction1), qwtPolar2Pos(p0, radius - 3, direction1 - M_PI))
 
