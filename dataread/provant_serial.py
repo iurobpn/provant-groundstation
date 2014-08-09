@@ -146,8 +146,6 @@ class ProvantSerial:
                     self.window.verticalSlider.setValue(self.rc.channel[1])
                     self.window.horizontalSlider_2.setValue(self.rc.channel[2])
                     self.window.verticalSlider_2.setValue(self.rc.channel[3])
-                    print self.rc.channel[4]
-                    print self.rc.channel[5]
                     if self.rc.channel[4]>50:
                         self.window.radioButton.setChecked(1)
                     else:
