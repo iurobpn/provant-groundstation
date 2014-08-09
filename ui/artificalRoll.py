@@ -121,7 +121,17 @@ class RollIndicator(Qwt.QwtDial):
     # keyPressEvent()
 
     def drawScale(self, painter, center, radius, origin, minArc, maxArc):
-        pass
+        direction1 = M_PI_2
+        triangleSize = qRound(radius * 0.15)
+        p0 = (QPoint(center.x() + 0, center.y() + 0))
+        p1 = qwtPolar2Pos(p0, radius - 2 * triangleSize +20 , direction1)
+        pa = QPolygon(3)
+        pa.setPoint(0, qwtPolar2Pos(p1, -1.6 * triangleSize,direction1))
+        pa.setPoint(1, qwtPolar2Pos(p1, triangleSize, direction1 + M_PI_2))
+        pa.setPoint(2, qwtPolar2Pos(p1, triangleSize, direction1 - M_PI_2))
+        color = self.palette().color(QPalette.Text)
+        painter.setBrush(color)
+        painter.drawPolygon(pa)
 
     def drawScaleContents(self, painter, center, radius):
         dir = 90#360 - int(roud(self.origin() - self.value()))
@@ -131,10 +141,24 @@ class RollIndicator(Qwt.QwtDial):
         painter.setBrush(skyColor)
         painter.drawChord(
             self.scaleContentsRect(), (dir - arc)*16, 2*arc*16)
-        direction1 = self.value() * M_PI / 180.0
+        direction1 = self.value() * M_PI / 180.0 
+        direction2 = self.value() * M_PI / 180.0 +M_PI_2
+
+        triangleSize = qRound(radius * 0.15)
+        p0 = (QPoint(center.x() + 0, center.y() + 0))
+        p1 = qwtPolar2Pos(p0, 2, direction2)
+        pa = QPolygon(3)
+        pa.setPoint(0, qwtPolar2Pos(p1, 2 * triangleSize, direction2))
+        pa.setPoint(1, qwtPolar2Pos(p1, triangleSize, direction2 + M_PI_2))
+        pa.setPoint(2, qwtPolar2Pos(p1, triangleSize, direction2 - M_PI_2))
+        color = self.palette().color(QPalette.Text)
+        painter.setBrush(color)
+        painter.drawPolygon(pa)
+
         p0 = (QPoint(center.x() + 0, center.y() + 0))
         color = self.palette().color(QPalette.Text)
         painter.setBrush(color)
         painter.setPen(QPen(color, 3))
         painter.drawLine(qwtPolar2Pos(p0, radius - 3, direction1), qwtPolar2Pos(p0, radius - 3, direction1 - M_PI))
+
         painter.restore()

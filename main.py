@@ -141,7 +141,7 @@ class MainWindow(QtGui.QMainWindow):
         self.horizon.setRoll(self.provantSerial.attitude.roll)
         self.horizon.setPitch(self.provantSerial.attitude.pitch)
         self.attitudeRoll.setRoll(self.provantSerial.attitude.roll)
-        self.attitudePitch.setRoll(-self.provantSerial.attitude.pitch)
+        self.attitudePitch.setRoll(self.provantSerial.attitude.pitch)
         self.attitudeYaw.setAngle(self.provantSerial.attitude.yaw)
 
     def timerEvent(self, e):
