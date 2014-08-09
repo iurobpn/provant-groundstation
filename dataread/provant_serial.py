@@ -7,6 +7,7 @@ import struct
 import sys
 from multwii_const import *
 from provant_const import *
+from array import *
 
 
 
@@ -141,20 +142,21 @@ class ProvantSerial:
                 for x in xrange(0, self.size / 2):
                     self.rc.channel[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
                 if self.window:
-                    print self.rc.channel[4]
                     self.window.horizontalSlider.setValue(self.rc.channel[0])
                     self.window.verticalSlider.setValue(self.rc.channel[1])
                     self.window.horizontalSlider_2.setValue(self.rc.channel[2])
                     self.window.verticalSlider_2.setValue(self.rc.channel[3])
-                    if self.rc.channel[3]>50:
+                    print self.rc.channel[4]
+                    print self.rc.channel[5]
+                    if self.rc.channel[4]>50:
                         self.window.radioButton.setChecked(1)
                     else:
                         self.window.radioButton.setChecked(0)
-                    if self.rc.channel[4]>50:
+                    if self.rc.channel[5]>50:
                         self.window.radioButton_2.setChecked(1)
                     else:
                         self.window.radioButton_2.setChecked(0)
-                    self.window.dial.setValue(self.rc.channel[5])
+                    self.window.dial.setValue(self.rc.channel[6])
 
 
         if (self.who == MSP_PID):
