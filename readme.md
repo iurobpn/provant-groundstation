@@ -9,8 +9,11 @@ A Graphic interface to [proVANT project][3], with some compatibility with [Multi
 
 Setup
 -------
-* Ubuntu
-	1. soon
+* Ubuntu -  *`sudo apt-get install python-serial python-kde4 python-qwt5-qt4 pyqt4-dev-tools`*
+	1. pyqt4-dev-tools
+	2. python-qwt5-qt4
+	3. python-kde4
+	4. python-serial
 
 Instalation
 -----------
@@ -25,6 +28,11 @@ Instalation
 	2. Go inside the folder (`cd provant-groundstation`)
 	3. Execute the program (`python main.py`)
 
+How to use
+-------
+
+You can use the [Willian's][24] [MultiwiiEmulator][5], or just send the messages with the [Multiwii Serial Potocol][2].
+
 Contributing
 ------------
 
@@ -38,7 +46,7 @@ Contributing
 Authors
 ------------
 1. [Patrick J.P][77]
-1. [Willian G.][24]
+2. [Willian G.][24]
 
 
 [1]: https://github.com/patrickelectric/provant-groundstation/pulls
