@@ -5,7 +5,7 @@ ProVANT-groundstation
 
 A Graphic interface to [proVANT project][3], with some compatibility with [Multiwii Serial Potocol][2].
 
-<img src="http://raw.githubusercontent.com/patrickelectric/provant-groundstation/master/sample.png" alt="">
+<img src="https://raw.githubusercontent.com/patrickelectric/provant-groundstation/master/sample.png" alt="">
 
 Setup
 -------
