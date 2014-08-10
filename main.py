@@ -1,5 +1,7 @@
 import sys
-from PyQt4 import QtGui, uic
+import os
+import webbrowser
+from PyQt4 import QtGui, uic, Qt
 import PyQt4.Qwt5 as Qwt
 from ui.items import CustomTreeItem
 from ui.data import DataSet
@@ -51,6 +53,7 @@ class MainWindow(QtGui.QMainWindow):
         self.actionSave.triggered.connect(self.saveFile)
         self.actionSave_as.triggered.connect(self.saveFileAs)
         self.actionClose.triggered.connect(QtGui.QApplication.exit)
+        self.actionAbout.triggered.connect(self.about)
 
     def saveFileAs(self):
         self.currentFile = None
@@ -66,6 +69,26 @@ class MainWindow(QtGui.QMainWindow):
         except Exception, e:
             self.currentFile = None
             QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
+
+    def about(self):
+        class aboutSetup(QtGui.QDialog):
+                def __init__(self):
+                    super(aboutSetup, self).__init__()
+                    uic.loadUi('about.ui', self)
+                    self.show()
+                    myPixmap = QtGui.QPixmap("provant_transp_canvas.png")
+                    myScaledPixmap = myPixmap.scaled(self.label.size(), 0)
+                    self.label.setPixmap(myScaledPixmap)
+                    self.connect(self.pushButton, Qt.SIGNAL("clicked()"), self.pushEvent)
+
+                def pushEvent(self):
+                    webbrowser.open('http://provantbr.github.io')
+                    webbrowser.open('https://github.com/Williangalvani')
+                    webbrowser.open('https://github.com/patrickelectric')
+                    self.close()
+
+
+        self.aboutWindow = aboutSetup()
 
     def setupSerial(self):
         #assert isinstance(self.serialList,QtGui.QComboBox) #hint for pycharm code-completion
