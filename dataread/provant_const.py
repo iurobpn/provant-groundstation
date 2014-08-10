@@ -4,6 +4,7 @@ __author__ = 'Patrick'
 MSP_ESCDATA                 =99
 MSP_CONTROLDATAOUT          =98
 MSP_CONTROLDATAIN           =97
+MSP_RCNORMALIZE             =96
 
 
 
@@ -27,5 +28,8 @@ class Escdata:
 	rpm						=[0]*2		#nibble
 	current					=[0]*2		#char
 	voltage					=[0]*2		#char		value*10
+
+class Rcnormalize:
+	channel		=[0]*12
 
 
