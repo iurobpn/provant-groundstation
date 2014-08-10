@@ -266,6 +266,8 @@ class ProvantSerial:
                     self.rcn.channel[x] = self.decode16(self.L[x*2:x*2+2])
                 #test
                 if self.window:
+                    self.window.addArray('RCN', self.rcn.channel[0:7])
+
                     self.window.horizontalSlider.setValue(self.rcn.channel[0])
                     self.window.verticalSlider.setValue(self.rcn.channel[1])
                     self.window.horizontalSlider_2.setValue(self.rcn.channel[2])
