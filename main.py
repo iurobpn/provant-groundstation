@@ -138,11 +138,16 @@ class MainWindow(QtGui.QMainWindow):
         self.rMotorSetpoint.setValue(self.provantSerial.motor.motor[1])
         self.lServo.setValue(self.provantSerial.servo.servo[4])
         self.rServo.setValue(self.provantSerial.servo.servo[5])
+
         self.horizon.setRoll(self.provantSerial.attitude.roll)
         self.horizon.setPitch(self.provantSerial.attitude.pitch)
+        
         self.attitudeRoll.setRoll(self.provantSerial.attitude.roll)
+        self.label_6.setText(str(self.provantSerial.attitude.roll))
         self.attitudePitch.setRoll(self.provantSerial.attitude.pitch)
+        self.label_7.setText(str(self.provantSerial.attitude.pitch))
         self.attitudeYaw.setAngle(self.provantSerial.attitude.yaw)
+        self.label_8.setText(str(self.provantSerial.attitude.yaw))
 
     def timerEvent(self, e):
         self.timerCounter += 1
