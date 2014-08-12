@@ -93,7 +93,7 @@ class ProvantSerial:
             if self.checksum_matches():
                 self.attitude.roll = self.decode16(self.L[0:2])/10
                 self.attitude.pitch = self.decode16(self.L[2:4])/10
-                self.attitude.yaw = self.decode16(self.L[4:6])/10
+                self.attitude.yaw = self.decode16(self.L[4:6])
                 if self.window:
                     self.window.addArray('Attitude',
                                          (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
