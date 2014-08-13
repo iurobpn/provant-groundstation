@@ -2,6 +2,7 @@ __author__ = 'Patrick'
 
 import sys
 import os
+import webbrowser
 from PyQt4 import QtGui, uic, Qt
 import PyQt4.Qwt5 as Qwt
 
