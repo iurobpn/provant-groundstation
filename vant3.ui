@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>893</width>
+    <width>1200</width>
     <height>739</height>
    </rect>
   </property>
@@ -19,24 +19,27 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
+        <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QFrame" name="frame">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>300</width>
-            <height>250</height>
+            <width>302</width>
+            <height>334</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
-            <height>300</height>
+            <width>302</width>
+            <height>334</height>
            </size>
           </property>
           <property name="frameShape">
@@ -587,8 +590,14 @@
          <widget class="QFrame" name="frame_2">
           <property name="minimumSize">
            <size>
-            <width>0</width>
-            <height>200</height>
+            <width>565</width>
+            <height>334</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>565</width>
+            <height>334</height>
            </size>
           </property>
           <property name="frameShape">
@@ -743,6 +752,37 @@
           </widget>
          </widget>
         </item>
+        <item>
+         <widget class="QFrame" name="horizontalFrame_4">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="leftMargin">
+            <number>1</number>
+           </property>
+           <property name="topMargin">
+            <number>1</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>State machine (future version)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -751,77 +791,106 @@
          <widget class="QwtPlot" name="qwtPlot"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="text">
-             <string>Data Available</string>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTreeWidget" name="treeWidget">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="alternatingRowColors">
-             <bool>false</bool>
-            </property>
-            <property name="indentation">
-             <number>10</number>
-            </property>
-            <property name="headerHidden">
-             <bool>true</bool>
-            </property>
-            <property name="columnCount">
-             <number>4</number>
-            </property>
-            <column>
-             <property name="text">
-              <string>1</string>
+         <widget class="QFrame" name="frame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="KSqueezedTextLabel" name="ksqueezedtextlabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>2</string>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
              </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>3</string>
+             <property name="lineWidth">
+              <number>1</number>
              </property>
-            </column>
-            <column>
              <property name="text">
-              <string notr="true">4</string>
+              <string>Data Available</string>
              </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="treeWidget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>300</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>450</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAsNeeded</enum>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>false</bool>
+             </property>
+             <property name="indentation">
+              <number>10</number>
+             </property>
+             <property name="headerHidden">
+              <bool>true</bool>
+             </property>
+             <property name="columnCount">
+              <number>4</number>
+             </property>
+             <column>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">4</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </item>
@@ -835,7 +904,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>893</width>
+     <width>1200</width>
      <height>20</height>
     </rect>
    </property>
@@ -915,22 +984,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>dial</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>241</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>151</x>
-     <y>265</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>horizontalSlider_2</sender>
    <signal>valueChanged(int)</signal>
    <receiver>label_3</receiver>
@@ -943,6 +996,22 @@
     <hint type="destinationlabel">
      <x>95</x>
      <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>241</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>265</y>
     </hint>
    </hints>
   </connection>
