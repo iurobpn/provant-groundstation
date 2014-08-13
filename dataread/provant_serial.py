@@ -94,6 +94,7 @@ class ProvantSerial:
                 self.attitude.roll = self.decode16(self.L[0:2])/10
                 self.attitude.pitch = self.decode16(self.L[2:4])/10
                 self.attitude.yaw = self.decode16(self.L[4:6])
+
                 if self.window:
                     self.window.addArray('Attitude',
                                          (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
@@ -111,11 +112,21 @@ class ProvantSerial:
                 self.raw_gps.speed = self.decode16(self.L[12:14])
                 self.raw_gps.ggc = self.decode16(self.L[14:16])
 
+                if self.window:
+                    self.window.addArray('GPS',
+                                         (self.raw_gps.fix,self.raw_gps.numsats,self.raw_gps.lat,self.raw_gps.lon,self.raw_gps.alt,self.raw_gps.speed,self.raw_gps.ggc),
+                                         ('Fix','Numsats','Lat','Long','Alt','Veloc','GGC'))
+
         if (self.who == MSP_COMP_GPS):
             if self.checksum_matches():
                 self.comp_gps.distance = self.decode16(self.L[0:2])
                 self.comp_gps.direction = self.decode16(self.L[2:4])
                 self.comp_gps.update = ord(self.L[4])
+
+                if self.window:
+                    self.window.addArray('Comp_gps',
+                                         (self.comp_gps.distance,self.comp_gps.direction,self.comp_gps.update),
+                                         ('Dist','Direction','Update'))                
 
         if (self.who == MSP_ANALOG):
             if self.checksum_matches():
@@ -124,10 +135,20 @@ class ProvantSerial:
                 self.analog.rssi = self.decode16(self.L[3:5])
                 self.analog.current = self.decode16(self.L[5:7])
 
+                if self.window:
+                    self.window.addArray('Analog',
+                                         (self.analog.vbat, self.analog.power,self.analog.rssi,self.analog.current),
+                                         ('Vbat','Power','Rssi','Current'))
+
         if (self.who == MSP_ALTITUDE):
             if self.checksum_matches():
                 self.altitude.alt = self.decode32(self.L[0:4])
                 self.altitude.vario = self.decode16(self.L[4:6])
+
+                if self.window:
+                    self.window.addArray('Altitude',
+                                         (self.altitude.alt,self.altitude.vario),
+                                         ('Alt','Vario'))
 
 
         if (self.who == MSP_STATUS):
@@ -138,17 +159,27 @@ class ProvantSerial:
                 self.status.flag = self.decode32(self.L[6:10])
                 self.status.gccs = ord(self.L[10])
 
+                if self.window:
+                    self.window.addArray('Status',
+                                         (self.status.cycleTime,self.status.i2cec,self.status.sensor,self.status.flag,self.status.gccs),
+                                         ('CycleTime','Numi2cerror','Sensor','Flag','Gccs'))
+
         if (self.who == MSP_DEBUG):
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.debug.debug[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
-                self.window.addArray('Debug', self.debug.debug)
+                
+                if self.window:
+                    self.window.addArray('Debug', self.debug.debug)
 
 
         if (self.who == MSP_RC):
             if self.checksum_matches():
                 for x in xrange(0, self.size / 2):
                     self.rc.channel[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
+
+                if self.window:
+                    self.window.addArray('RC_channel', self.rc.channel)
 
         if (self.who == MSP_PID):
             if self.checksum_matches():
