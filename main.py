@@ -14,6 +14,7 @@ from ui.artificalRoll import RollIndicator
 from ui.artificalPitch import PitchIndicator
 from ui.artificalYaw import YawIndicator
 from dataPersistency.csvRecorder import CsvRecorder
+from windows.about import AboutSetup
 
 XRANGE = 500
 
@@ -71,24 +72,7 @@ class MainWindow(QtGui.QMainWindow):
             QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
 
     def about(self):
-        class aboutSetup(QtGui.QDialog):
-                def __init__(self):
-                    super(aboutSetup, self).__init__()
-                    uic.loadUi('windows/about.ui', self)
-                    self.show()
-                    myPixmap = QtGui.QPixmap("provant_transp_canvas.png")
-                    myScaledPixmap = myPixmap.scaled(self.label.size(), 0)
-                    self.label.setPixmap(myScaledPixmap)
-                    self.connect(self.pushButton, Qt.SIGNAL("clicked()"), self.pushEvent)
-
-                def pushEvent(self):
-                    webbrowser.open('http://provantbr.github.io')
-                    webbrowser.open('https://github.com/Williangalvani')
-                    webbrowser.open('https://github.com/patrickelectric')
-                    self.close()
-
-
-        self.aboutWindow = aboutSetup()
+         self.aboutWindow = AboutSetup()
 
     def setupSerial(self):
         #assert isinstance(self.serialList,QtGui.QComboBox) #hint for pycharm code-completion
