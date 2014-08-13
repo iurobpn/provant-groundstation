@@ -21,7 +21,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('vant3.ui', self)
+        uic.loadUi('windows/vant.ui', self)
         self.setupTreeWidget()
         self.setWindowIcon(QtGui.QIcon('favicon.ico'))
         self.show()
@@ -74,7 +74,7 @@ class MainWindow(QtGui.QMainWindow):
         class aboutSetup(QtGui.QDialog):
                 def __init__(self):
                     super(aboutSetup, self).__init__()
-                    uic.loadUi('about.ui', self)
+                    uic.loadUi('windows/about.ui', self)
                     self.show()
                     myPixmap = QtGui.QPixmap("provant_transp_canvas.png")
                     myScaledPixmap = myPixmap.scaled(self.label.size(), 0)
