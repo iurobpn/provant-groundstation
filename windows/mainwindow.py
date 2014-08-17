@@ -24,7 +24,7 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('windows/vant.ui', self)
         self.setupTreeWidget()
-        self.setWindowIcon(QtGui.QIcon('favicon.ico'))
+        self.setWindowIcon(QtGui.QIcon('windows/icon/favicon.ico'))
         self.show()
         self.setupPlot()
         self.dataSets = {}
