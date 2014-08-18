@@ -2,11 +2,13 @@ __author__ = 'Patrick'
 
 import sys
 import os
+import time
 import webbrowser
 from PyQt4 import QtGui, uic, Qt
 import PyQt4.Qwt5 as Qwt
+from PyQt4.QtGui import QApplication, QMessageBox
 from ui.items import CustomTreeItem
-from ui.data import DataSet
+from ui.data import *
 import random
 from helpers.serialHelpers import list_serial_ports
 from PyQt4.Qwt5.anynumpy import *
@@ -17,6 +19,7 @@ from ui.artificalPitch import PitchIndicator
 from ui.artificalYaw import YawIndicator
 from dataPersistency.csvRecorder import CsvRecorder
 from windows.about import AboutSetup
+from windows.logsave import LogSaveSetup
 
 class MainWindow(QtGui.QMainWindow):
 
@@ -24,15 +27,18 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('windows/vant.ui', self)
         self.setupTreeWidget()
-        self.setWindowIcon(QtGui.QIcon('favicon.ico'))
+        self.setWindowIcon(QtGui.QIcon('windows/icon/favicon.ico'))
         self.show()
         self.setupPlot()
         self.dataSets = {}
         self.provantSerial = None
+        self.inSave=False
         #legend = Qwt.QwtLegend()
         #self.qwtPlot.insertLegend(legend, Qwt.QwtPlot.TopLegend)
         self.setupSerial()
         self.timerCounter =0
+        self.sampleCounter =0
+        self.startTime = time.time()
 
         self.horizon = AttitudeIndicator(self.frame_2)
         self.lay3.addWidget(self.horizon)
@@ -46,33 +52,53 @@ class MainWindow(QtGui.QMainWindow):
         self.attitudeYaw = YawIndicator(self.frame_2)
         self.lay5.addWidget(self.attitudeYaw)
         self.setupMenu()
+        
+        self.logWindow = LogSaveSetup(window=self)
 
     def setupMenu(self):
         self.currentFile = None
-        self.actionSave.setShortcut('Ctrl+S')
-        self.actionSave.setStatusTip('Save new File')
-        self.actionSave.triggered.connect(self.saveFile)
-        self.actionSave_as.triggered.connect(self.saveFileAs)
+        #self.actionSave.setShortcut('Ctrl+S')
+        #self.actionSave.setStatusTip('Save new File')
+        #self.actionSave.triggered.connect(self.saveFile)
+        #self.actionSave_as.triggered.connect(self.saveFileAs)
+        self.actionLog.setShortcut('Ctrl+L')
+        self.actionLog.triggered.connect(self.logSave)
         self.actionClose.triggered.connect(QtGui.QApplication.exit)
         self.actionAbout.triggered.connect(self.about)
 
+    def closeEvent(self, event):
+        reply = QtGui.QMessageBox.question(self, 'Message',
+            "Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        if reply == QtGui.QMessageBox.Yes:
+            QApplication.quit()
+            event.accept()
+        else:
+            event.ignore()
+    
     def saveFileAs(self):
         self.currentFile = None
         self.saveFile()
 
     def saveFile(self):
+        for namea, dataset in self.dataSets.items():
+            dataset.data=dataset.data[500:]
+        self.inSave=True
         writer = CsvRecorder()
         if not self.currentFile:
-            self.currentFile = QtGui.QFileDialog.getSaveFileName(self, 'Save file','/home')
+            self.currentFile = QtGui.QFileDialog.getSaveFileName(self, 'Save file','./')
         try:
             writer.writeDataToFile(self.dataSets, self.currentFile)
             QtGui.QMessageBox.about(self, "","Success!")
         except Exception, e:
             self.currentFile = None
             QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
+        self.inSave=False
+    
 
     def about(self):
          self.aboutWindow = AboutSetup()
+    def logSave(self):
+         self.logWindow.showWindow()
 
     def setupSerial(self):
         #assert isinstance(self.serialList,QtGui.QComboBox) #hint for pycharm code-completion
@@ -95,7 +121,6 @@ class MainWindow(QtGui.QMainWindow):
 
     def setSerial(self, ser):
         self.provantSerial = ser
-
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
             self.dataSets[datasetName] = DataSet(self, datasetName)
@@ -105,31 +130,32 @@ class MainWindow(QtGui.QMainWindow):
         self.dataSets[datasetName].addPoint(y)
 
     def addArray(self, datasetName, points,setnames = None):
-        if setnames:
-            datasetName_ = datasetName + setnames[0]
-            if datasetName_ not in self.dataSets:
-                self.addDataTree(datasetName, len(points),setnames)
+        if self.inSave==False:
+            if setnames:
+                datasetName_ = datasetName + setnames[0]
+                if datasetName_ not in self.dataSets:
+                    self.addDataTree(datasetName, len(points),setnames)
+                    for i in range(len(points)):
+                        datasetName_ = datasetName+setnames[i]
+                        #print datasetName_
+                        self.dataSets[datasetName_] = DataSet(self, datasetName_)
+                        self.dataSets[datasetName_].curve.attach(self.qwtPlot)
+                        self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
                 for i in range(len(points)):
-                    datasetName_ = datasetName+setnames[i]
-                    #print datasetName_
-                    self.dataSets[datasetName_] = DataSet(self, datasetName_)
-                    self.dataSets[datasetName_].curve.attach(self.qwtPlot)
-                    self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
-            for i in range(len(points)):
-                if points[i] != None:
-                    self.dataSets[datasetName+setnames[i]].addPoint(points[i])
-        else:
-            datasetName_ = datasetName +  '['+str(0)+']'
-            if datasetName_ not in self.dataSets:
-                self.addDataTree(datasetName, len(points))
+                    if points[i] != None:
+                        self.dataSets[datasetName+setnames[i]].addPoint(points[i])
+            else:
+                datasetName_ = datasetName +  '['+str(0)+']'
+                if datasetName_ not in self.dataSets:
+                    self.addDataTree(datasetName, len(points))
+                    for i in range(len(points)):
+                        datasetName_ = datasetName + '['+str(i)+']'
+                        self.dataSets[datasetName_] = DataSet(self, datasetName_)
+                        self.dataSets[datasetName_].curve.attach(self.qwtPlot)
+                        self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
                 for i in range(len(points)):
-                    datasetName_ = datasetName + '['+str(i)+']'
-                    self.dataSets[datasetName_] = DataSet(self, datasetName_)
-                    self.dataSets[datasetName_].curve.attach(self.qwtPlot)
-                    self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
-            for i in range(len(points)):
-                if points[i]:
-                    self.dataSets[datasetName + '['+str(i)+']'].addPoint(points[i])
+                    if points[i]:
+                        self.dataSets[datasetName + '['+str(i)+']'].addPoint(points[i])
 
     def setupPlot(self):
         self.startTimer(50)
@@ -158,6 +184,18 @@ class MainWindow(QtGui.QMainWindow):
         self.label_8.setText(str(self.provantSerial.attitude.yaw))
 
     def timerEvent(self, e):
+        if(len(self.dataSets.keys())>2):
+            self.sampleCounter=len(self.dataSets[self.dataSets.keys()[0]].data)-XRANGE
+            self.logWindow.showDisplay(value=self.sampleCounter)
+            #print self.sampleCounter
+
+        '''
+        timePass = time.time() - self.startTime
+        if(self.sampleCounter>0):
+            print timePass/self.sampleCounter
+        '''
+        
+
         self.timerCounter += 1
         if self.provantSerial:
             self.updateData()

@@ -10,6 +10,7 @@ class AboutSetup(QtGui.QDialog):
     def __init__(self):
         super(AboutSetup, self).__init__()
         uic.loadUi('windows/about.ui', self)
+        self.setWindowIcon(QtGui.QIcon('windows/icon/favicon.ico'))
         self.show()
         myPixmap = QtGui.QPixmap("provant_transp_canvas.png")
         myScaledPixmap = myPixmap.scaled(self.label.size(), 0)
