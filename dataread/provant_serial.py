@@ -36,6 +36,7 @@ class ProvantSerial:
         self.controldatain = Controldatain()
         self.controldataout = Controldataout()
         self.escdata = Escdata()
+        self.sampleCount=0
 
     def decodeFloat(self, data):
         return struct.unpack('<f', ''.join(data))[0]
@@ -67,6 +68,8 @@ class ProvantSerial:
         check = self.who ^ self.size
         for x in xrange(0, self.size):
             check ^= ord(self.L[x])
+        if((check == ord(self.L[self.size]))):
+            self.sampleCount+=1
         return (check == ord(self.L[self.size]))
 
     def update(self):
@@ -85,6 +88,9 @@ class ProvantSerial:
         self.word = self.ser.read(self.size + 1)  # pega os dados + checksum
         self.L = list(self.word)  # passa para uma lista
         self.takeData()
+
+    def readSampleCount(self):
+        return self.sampleCount
 
 ###############  PROPER MESSAGE DECODING IS HERE ##################################
 

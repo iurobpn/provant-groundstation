@@ -3,6 +3,7 @@ __author__ = 'will'
 from PyQt4 import QtGui, uic
 import PyQt4.Qwt5 as Qwt
 from PyQt4.Qwt5.anynumpy import *
+global XRANGE
 XRANGE = 500
 
 class DataSet():
@@ -31,4 +32,7 @@ class DataSet():
     def setColor(self, value):
         ## pen style: http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
         self.curve.setPen(QtGui.QPen(value, 2))
+
+    def xSize():
+        return XRANGE
 
