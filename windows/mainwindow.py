@@ -6,6 +6,7 @@ import time
 import webbrowser
 from PyQt4 import QtGui, uic, Qt
 import PyQt4.Qwt5 as Qwt
+from PyQt4.QtGui import QApplication, QMessageBox
 from ui.items import CustomTreeItem
 from ui.data import *
 import random
@@ -64,6 +65,15 @@ class MainWindow(QtGui.QMainWindow):
         self.actionLog.triggered.connect(self.logSave)
         self.actionClose.triggered.connect(QtGui.QApplication.exit)
         self.actionAbout.triggered.connect(self.about)
+
+    def closeEvent(self, event):
+        reply = QtGui.QMessageBox.question(self, 'Message',
+            "Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        if reply == QtGui.QMessageBox.Yes:
+            QApplication.quit()
+            event.accept()
+        else:
+            event.ignore()
     
     def saveFileAs(self):
         self.currentFile = None
@@ -184,7 +194,7 @@ class MainWindow(QtGui.QMainWindow):
         if(self.sampleCounter>0):
             print timePass/self.sampleCounter
         '''
-
+        
 
         self.timerCounter += 1
         if self.provantSerial:
