@@ -172,8 +172,8 @@ class ProvantSerial:
 
         if (self.who == MSP_DEBUG):
             if self.checksum_matches():
-                for x in xrange(0, self.size / 2):
-                    self.debug.debug[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
+                for i in xrange(0, self.size / 2):
+                    self.debug.debug[i] = self.decode16(self.L[i*2:i*2+2])
                 
                 if self.window:
                     self.window.addArray('Debug', self.debug.debug)
