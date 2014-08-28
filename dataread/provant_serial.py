@@ -155,6 +155,7 @@ class ProvantSerial:
                     self.window.addArray('Altitude',
                                          (self.altitude.alt,self.altitude.vario),
                                          ('Alt','Vario'))
+                    self.window.verticalSlider_3.setValue(self.altitude.alt)
 
 
         if (self.who == MSP_STATUS):
