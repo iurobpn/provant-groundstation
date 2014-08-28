@@ -304,20 +304,21 @@ class ProvantSerial:
                 #test
                 if self.window:
                     self.window.addArray('RCN', self.rcn.channel[0:7])
-
-                    self.window.horizontalSlider.setValue(self.rcn.channel[0])
+                    self.window.horizontalSlider.setValue(self.rcn.channel[2])
                     self.window.verticalSlider.setValue(self.rcn.channel[1])
-                    self.window.horizontalSlider_2.setValue(self.rcn.channel[2])
-                    self.window.verticalSlider_2.setValue(self.rcn.channel[3])
-                    if self.rcn.channel[4]>50:
+                    self.window.horizontalSlider_2.setValue(self.rcn.channel[3])
+                    self.window.verticalSlider_2.setValue(self.rcn.channel[0])
+                    self.window.radioButton.setAutoExclusive(False);
+                    self.window.radioButton_2.setAutoExclusive(False);
+                    if self.rcn.channel[5]>50:
                         self.window.radioButton.setChecked(1)
                     else:
                         self.window.radioButton.setChecked(0)
-                    if self.rcn.channel[5]>50:
+                    if self.rcn.channel[6]>50:
                         self.window.radioButton_2.setChecked(1)
                     else:
                         self.window.radioButton_2.setChecked(0)
-                    self.window.dial.setValue(self.rcn.channel[6])
+                    self.window.dial.setValue(self.rcn.channel[4])
 
 if __name__ == '__main__':
     provant = ProvantSerial()
