@@ -155,6 +155,7 @@ class ProvantSerial:
                     self.window.addArray('Altitude',
                                          (self.altitude.alt,self.altitude.vario),
                                          ('Alt','Vario'))
+                    self.window.verticalSlider_3.setValue(self.altitude.alt)
 
 
         if (self.who == MSP_STATUS):
@@ -172,8 +173,8 @@ class ProvantSerial:
 
         if (self.who == MSP_DEBUG):
             if self.checksum_matches():
-                for x in xrange(0, self.size / 2):
-                    self.debug.debug[x] = ord(self.L[x * 2]) + (ord(self.L[x * 2 + 1]) << 8)
+                for i in xrange(0, self.size / 2):
+                    self.debug.debug[i] = self.decode16(self.L[i*2:i*2+2])
                 
                 if self.window:
                     self.window.addArray('Debug', self.debug.debug)
@@ -269,10 +270,10 @@ class ProvantSerial:
         if (self.who == MSP_CONTROLDATAOUT):
             if self.checksum_matches():
                 self.controldataout.servoLeft = self.decodeFloat(self.L[0:4])
-                self.controldataout.escLeftNewtons = self.decodeFloat(self.L[4:8])
-                self.controldataout.escLeftSpeed = self.decodeFloat(self.L[8:12])
+                self.controldataout.escLeftNewtons  = self.decodeFloat(self.L[4:8])
+                self.controldataout.escRightNewtons = self.decodeFloat(self.L[8:12])
                 self.controldataout.servoRight = self.decodeFloat(self.L[12:16])
-                self.controldataout.escRightNewtons = self.decodeFloat(self.L[16:20])
+                self.controldataout.escLeftSpeed = self.decodeFloat(self.L[16:20])
                 self.controldataout.escRightSpeed = self.decodeFloat(self.L[20:24])
                 if self.window:
                     data = self.controldataout
@@ -280,7 +281,7 @@ class ProvantSerial:
                                          (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
                                          ('Newtons', 'Speed', 'Servo'))
                     self.window.addArray("RightActuatorsCommand",
-                                         (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
+                                         (data.escRightNewtons, data.escRightSpeed, data.servoRight),
                                          ('Newtons', 'Speed', 'Servo'))
 
         if (self.who == MSP_ESCDATA):
@@ -304,20 +305,21 @@ class ProvantSerial:
                 #test
                 if self.window:
                     self.window.addArray('RCN', self.rcn.channel[0:7])
-
-                    self.window.horizontalSlider.setValue(self.rcn.channel[0])
+                    self.window.horizontalSlider.setValue(self.rcn.channel[2])
                     self.window.verticalSlider.setValue(self.rcn.channel[1])
-                    self.window.horizontalSlider_2.setValue(self.rcn.channel[2])
-                    self.window.verticalSlider_2.setValue(self.rcn.channel[3])
-                    if self.rcn.channel[4]>50:
+                    self.window.horizontalSlider_2.setValue(self.rcn.channel[3])
+                    self.window.verticalSlider_2.setValue(self.rcn.channel[0])
+                    self.window.radioButton.setAutoExclusive(False);
+                    self.window.radioButton_2.setAutoExclusive(False);
+                    if self.rcn.channel[5]>50:
                         self.window.radioButton.setChecked(1)
                     else:
                         self.window.radioButton.setChecked(0)
-                    if self.rcn.channel[5]>50:
+                    if self.rcn.channel[6]>50:
                         self.window.radioButton_2.setChecked(1)
                     else:
                         self.window.radioButton_2.setChecked(0)
-                    self.window.dial.setValue(self.rcn.channel[6])
+                    self.window.dial.setValue(self.rcn.channel[4])
 
 if __name__ == '__main__':
     provant = ProvantSerial()
