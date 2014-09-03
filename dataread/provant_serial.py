@@ -270,10 +270,10 @@ class ProvantSerial:
         if (self.who == MSP_CONTROLDATAOUT):
             if self.checksum_matches():
                 self.controldataout.servoLeft = self.decodeFloat(self.L[0:4])
-                self.controldataout.escLeftNewtons = self.decodeFloat(self.L[4:8])
-                self.controldataout.escLeftSpeed = self.decodeFloat(self.L[8:12])
+                self.controldataout.escLeftNewtons  = self.decodeFloat(self.L[4:8])
+                self.controldataout.escRightNewtons = self.decodeFloat(self.L[8:12])
                 self.controldataout.servoRight = self.decodeFloat(self.L[12:16])
-                self.controldataout.escRightNewtons = self.decodeFloat(self.L[16:20])
+                self.controldataout.escLeftSpeed = self.decodeFloat(self.L[16:20])
                 self.controldataout.escRightSpeed = self.decodeFloat(self.L[20:24])
                 if self.window:
                     data = self.controldataout
@@ -281,7 +281,7 @@ class ProvantSerial:
                                          (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
                                          ('Newtons', 'Speed', 'Servo'))
                     self.window.addArray("RightActuatorsCommand",
-                                         (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
+                                         (data.escRightNewtons, data.escRightSpeed, data.servoRight),
                                          ('Newtons', 'Speed', 'Servo'))
 
         if (self.who == MSP_ESCDATA):
