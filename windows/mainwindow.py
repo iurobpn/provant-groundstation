@@ -17,6 +17,7 @@ from ui.artificalHorizon import AttitudeIndicator
 from ui.artificalRoll import RollIndicator
 from ui.artificalPitch import PitchIndicator
 from ui.artificalYaw import YawIndicator
+from ui.joystick import JoystickStick
 from dataPersistency.csvRecorder import CsvRecorder
 from windows.about import AboutSetup
 from windows.logsave import LogSaveSetup
@@ -52,7 +53,12 @@ class MainWindow(QtGui.QMainWindow):
         self.attitudeYaw = YawIndicator(self.frame_2)
         self.lay5.addWidget(self.attitudeYaw)
         self.setupMenu()
-        
+
+        self.left_joystick = JoystickStick()
+        self.lay6.addWidget(self.left_joystick)
+        self.right_joystick = JoystickStick()
+        self.lay6.addWidget(self.right_joystick)
+
         self.logWindow = LogSaveSetup(window=self)
 
     def setupMenu(self):
