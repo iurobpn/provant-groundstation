@@ -144,7 +144,6 @@ class MainWindow(QtGui.QMainWindow):
                     if points[i] != None:
                         self.dataSets[datasetName+'.'+setnames[i]].addPoint(points[i])
             else:
-                return
                 datasetName_ = datasetName +  '.['+str(0)+']'
                 if datasetName_ not in self.dataSets:
                     self.addDataTree(datasetName, len(points))
@@ -270,4 +269,4 @@ class MainWindow(QtGui.QMainWindow):
         elif node:
             return CustomTreeItem(self, node, name, color=False)
         else:
-            return CustomTreeItem(self, parent, name, color=True)
+            return CustomTreeItem(self, parent, name, color=False)
