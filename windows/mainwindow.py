@@ -26,7 +26,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('windows/vant.ui', self)
+        uic.loadUi('windows/vant2.ui', self)
         self.setupTreeWidget()
         self.setWindowIcon(QtGui.QIcon('windows/icon/favicon.ico'))
         self.show()
