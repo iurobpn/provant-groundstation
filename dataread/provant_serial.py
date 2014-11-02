@@ -102,7 +102,7 @@ class ProvantSerial:
                 self.attitude.yaw = self.decode16(self.L[4:6])
 
                 if self.window:
-                    self.window.addArray('Attitude',
+                    self.window.addArray('Attitude.Filtered',
                                          (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
                                          ('Roll','Pitch','Yaw'))
 
@@ -228,9 +228,9 @@ class ProvantSerial:
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
 
                 if self.window:
-                    self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
-                    self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
-                    self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
+                    self.window.addArray('Attitude.Gyr', self.imu.gyr,('X','Y','Z'))
+                    self.window.addArray('Attitude.Acc', self.imu.acc,('X','Y','Z'))
+                    self.window.addArray('Attitude.Mag', self.imu.mag,('X','Y','Z'))
 
         if (self.who == MSP_MOTOR):
             if self.checksum_matches():
