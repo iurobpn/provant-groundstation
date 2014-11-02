@@ -102,7 +102,7 @@ class ProvantSerial:
                 self.attitude.yaw = self.decode16(self.L[4:6])
 
                 if self.window:
-                    self.window.addArray('Attitude',
+                    self.window.addArray('Attitude.Filtered',
                                          (self.attitude.roll, self.attitude.pitch, self.attitude.yaw),
                                          ('Roll','Pitch','Yaw'))
 
@@ -228,9 +228,9 @@ class ProvantSerial:
                     self.imu.mag[i-6] = self.decode16(self.L[i*2:i*2+2])
 
                 if self.window:
-                    self.window.addArray('Gyr', self.imu.gyr,('X','Y','Z'))
-                    self.window.addArray('Acc', self.imu.acc,('X','Y','Z'))
-                    self.window.addArray('Mag', self.imu.mag,('X','Y','Z'))
+                    self.window.addArray('Attitude.Gyro', self.imu.gyr,('X','Y','Z'))
+                    self.window.addArray('Attitude.Acc', self.imu.acc,('X','Y','Z'))
+                    self.window.addArray('Attitude.Mag', self.imu.mag,('X','Y','Z'))
 
         if (self.who == MSP_MOTOR):
             if self.checksum_matches():
@@ -258,13 +258,13 @@ class ProvantSerial:
                     self.controldatain.velocity[x-9]= self.decodeFloat(self.L[x*4:4+x*4])
                 if self.window:
                     data = self.controldatain
-                    self.window.addArray("Datarpy",
+                    self.window.addArray("Data.rpy",
                                          data.rpy,)
-                    self.window.addArray("Datadrpy",
+                    self.window.addArray("Data.drpy",
                                          data.drpy,)
-                    self.window.addArray("DataPosition",
+                    self.window.addArray("Data.Position",
                                          data.position,)
-                    self.window.addArray("DataVelocity",
+                    self.window.addArray("Data.Velocity",
                                          data.velocity,)
 
         if (self.who == MSP_CONTROLDATAOUT):
@@ -277,10 +277,10 @@ class ProvantSerial:
                 self.controldataout.escRightSpeed = self.decodeFloat(self.L[20:24])
                 if self.window:
                     data = self.controldataout
-                    self.window.addArray("LeftActuatorsCommand",
+                    self.window.addArray("ActuatorsCommand.Left",
                                          (data.escLeftNewtons, data.escLeftSpeed, data.servoLeft),
                                          ('Newtons', 'Speed', 'Servo'))
-                    self.window.addArray("RightActuatorsCommand",
+                    self.window.addArray("ActuatorsCommand.Right",
                                          (data.escRightNewtons, data.escRightSpeed, data.servoRight),
                                          ('Newtons', 'Speed', 'Servo'))
 

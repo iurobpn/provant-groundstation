@@ -129,33 +129,32 @@ class MainWindow(QtGui.QMainWindow):
             self.dataSets[datasetName].setColor(self.getColor(datasetName))
         self.dataSets[datasetName].addPoint(y)
 
-    def addArray(self, datasetName, points,setnames = None):
+    def addArray(self, datasetName, points, setnames = None):
         if self.inSave==False:
             if setnames:
-                datasetName_ = datasetName + setnames[0]
+                datasetName_ = datasetName + '.'+setnames[0]
                 if datasetName_ not in self.dataSets:
-                    self.addDataTree(datasetName, len(points),setnames)
+                    self.addDataTree(datasetName, len(points), setnames)
                     for i in range(len(points)):
-                        datasetName_ = datasetName+setnames[i]
-                        #print datasetName_
+                        datasetName_ = datasetName + '.' + setnames[i]
                         self.dataSets[datasetName_] = DataSet(self, datasetName_)
                         self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                         self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
                 for i in range(len(points)):
                     if points[i] != None:
-                        self.dataSets[datasetName+setnames[i]].addPoint(points[i])
+                        self.dataSets[datasetName+'.'+setnames[i]].addPoint(points[i])
             else:
-                datasetName_ = datasetName +  '['+str(0)+']'
+                datasetName_ = datasetName +  '.['+str(0)+']'
                 if datasetName_ not in self.dataSets:
                     self.addDataTree(datasetName, len(points))
                     for i in range(len(points)):
-                        datasetName_ = datasetName + '['+str(i)+']'
+                        datasetName_ = datasetName + '.['+str(i)+']'
                         self.dataSets[datasetName_] = DataSet(self, datasetName_)
                         self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                         self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
                 for i in range(len(points)):
                     if points[i]:
-                        self.dataSets[datasetName + '['+str(i)+']'].addPoint(points[i])
+                        self.dataSets[datasetName + '.['+str(i)+']'].addPoint(points[i])
 
     def setupPlot(self):
         self.startTimer(50)
@@ -211,17 +210,17 @@ class MainWindow(QtGui.QMainWindow):
         self.treeWidget.header().setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
         self.treeWidget.setColumnWidth(1, 30)
 
-    def addDataTree(self, data, children_number,setnames = None):
+    def addDataTree(self, dataname, children_number,setnames = None):
+        parent = self.findOrCreateNode(dataname)#CustomTreeItem(self, self.treeWidget, dataname, self.treeWidget, color=False)
+        #print "found parent:" , parent.text(0)
         if setnames:
-            parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
             for i in range(children_number):
-                a = CustomTreeItem(self, parent, data+setnames[i])
+                a = CustomTreeItem(self, parent, dataname+ '.'+setnames[i])
                 a.setText(0,setnames[i])
             self.treeWidget.resizeColumnToContents(2)
         else:
-            parent = CustomTreeItem(self, self.treeWidget, data, self.treeWidget, color=False)
             for i in range(children_number):
-                CustomTreeItem(self, parent, data + '['+str(i)+']')
+                CustomTreeItem(self, parent, dataname + '.['+str(i)+']')
             self.treeWidget.resizeColumnToContents(2)
 
     def addSingleData(self, name):
@@ -245,9 +244,29 @@ class MainWindow(QtGui.QMainWindow):
             root = self.treeWidget.invisibleRootItem()
             node = root
         else:
-            #print node.text(0)
             if node._name == name:
                 return node
         for i in range(node.childCount()):
             if self.findNode(name, node.child(i)):
                 return self.findNode(name, node.child(i))
+        return False
+
+
+    def findOrCreateNode(self, name, node=None):
+        parent = self.treeWidget
+        currentName = ""
+        while "." in name:
+            first, name = name.split(".", 1)
+            currentName += first
+            node = self.findNode(first)
+            if not node:
+                node = CustomTreeItem(self, parent, currentName, color=False)
+            else:
+                parent = node
+        lastNode = self.findNode(name, node)
+        if lastNode:
+            return lastNode
+        elif node:
+            return CustomTreeItem(self, node, name, color=False)
+        else:
+            return CustomTreeItem(self, parent, name, color=False)
