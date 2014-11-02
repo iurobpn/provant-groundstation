@@ -27,7 +27,8 @@ class CustomTreeItem(QtGui.QTreeWidgetItem):
             #print type(self.view.view)
             self.colorChooser = KColorButton(self.view)
             self.colorChooser.setColor(QtGui.QColor(randint(0, 255), randint(0, 255), randint(0, 255)))
-            self.colorChooser.setGeometry(QtCore.QRect(0, 0, 10, 10))
+            #self.colorChooser.setGeometry(QtCore.QRect(0, 0, 10, 10))
+            self.colorChooser.setFixedSize(30,20)
             self.view.setItemWidget(self, 1, self.colorChooser)
             self.view.connect(self.colorChooser, QtCore.SIGNAL("changed (const QColor&)"), self.colorChanged)
 
