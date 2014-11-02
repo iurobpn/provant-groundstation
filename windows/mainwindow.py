@@ -212,7 +212,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def addDataTree(self, dataname, children_number,setnames = None):
         parent = self.findOrCreateNode(dataname)#CustomTreeItem(self, self.treeWidget, dataname, self.treeWidget, color=False)
-        print "found parent:" , parent.text(0)
+        #print "found parent:" , parent.text(0)
         if setnames:
             for i in range(children_number):
                 a = CustomTreeItem(self, parent, dataname+ '.'+setnames[i])

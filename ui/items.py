@@ -6,7 +6,7 @@ from random import randint
 class CustomTreeItem(QtGui.QTreeWidgetItem):
 
     def __init__(self, window, parent, name, view=None, color=True):
-        print "creating ", name, " under ", parent
+        #print "creating ", name, " under ", parent
         if view:
             self.view = view
         if not view:
