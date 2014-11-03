@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../fpv/.idea/fpv.iml" filepath="$PROJECT_DIR$/../fpv/.idea/fpv.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/provant-groundstation.iml" filepath="$PROJECT_DIR$/.idea/provant-groundstation.iml" />
     </modules>
   </component>
