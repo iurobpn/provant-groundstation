@@ -26,7 +26,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('windows/vant2.ui', self)
+        uic.loadUi('windows/vant.ui', self)
         self.setupTreeWidget()
         self.setWindowIcon(QtGui.QIcon('windows/icon/favicon.ico'))
         self.show()
@@ -74,7 +74,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         reply = QtGui.QMessageBox.question(self, 'Message',
-            "Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+            "Are you sure you want to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
         if reply == QtGui.QMessageBox.Yes:
             QApplication.quit()
             event.accept()
