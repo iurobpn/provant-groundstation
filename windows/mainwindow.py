@@ -167,7 +167,7 @@ class MainWindow(QtGui.QMainWindow):
                         self.dataSets[datasetName_].curve.attach(self.qwtPlot)
                         self.dataSets[datasetName_].setColor(self.getColor(datasetName_))
                 for i in range(len(points)):
-                    if points[i]:
+                    if points[i] is not None:
                         self.dataSets[datasetName + '.['+str(i)+']'].addPoint(points[i])
 
     def setupPlot(self):
