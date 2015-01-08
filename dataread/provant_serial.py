@@ -38,9 +38,6 @@ class ProvantSerial:
         self.escdata = Escdata()
         self.sampleCount=0
 
-    def write(self,char):
-        self.ser.write(char)
-
     def decodeFloat(self, data):
         return struct.unpack('<f', ''.join(data))[0]
 
