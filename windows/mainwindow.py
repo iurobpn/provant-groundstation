@@ -124,9 +124,17 @@ class MainWindow(QtGui.QMainWindow):
             self.serialStatus.setText("ERROR!")
             print e
 
+    def sendSerialStop(self):
+        self.provantSerial.write('s')
+    def sendSerialRestart(self):
+        self.provantSerial.write('r')
 
     def setSerial(self, ser):
         self.provantSerial = ser
+        self.emergencia_button.clicked.connect(self.sendSerialStop)
+        self.reiniciar_button.clicked.connect(self.sendSerialRestart)
+        
+
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
             self.dataSets[datasetName] = DataSet(self, datasetName)
