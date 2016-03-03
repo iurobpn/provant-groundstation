@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
-# 
+#
 __author__ = 'Patrick'
 import serial
 import struct
@@ -132,7 +132,7 @@ class ProvantSerial:
                 if self.window:
                     self.window.addArray('Comp_gps',
                                          (self.comp_gps.distance,self.comp_gps.direction,self.comp_gps.update),
-                                         ('Dist','Direction','Update'))                
+                                         ('Dist','Direction','Update'))
 
         if (self.who == MSP_ANALOG):
             if self.checksum_matches():
@@ -175,7 +175,7 @@ class ProvantSerial:
             if self.checksum_matches():
                 for i in xrange(0, self.size / 2):
                     self.debug.debug[i] = self.decode16(self.L[i*2:i*2+2])
-                
+
                 if self.window:
                     self.window.addArray('Debug', self.debug.debug)
 

@@ -80,7 +80,7 @@ class MainWindow(QtGui.QMainWindow):
             event.accept()
         else:
             event.ignore()
-    
+
     def saveFileAs(self):
         self.currentFile = None
         self.saveFile()
@@ -99,7 +99,7 @@ class MainWindow(QtGui.QMainWindow):
             self.currentFile = None
             QtGui.QMessageBox.about(self, "","Error!\n{0}".format(e))
         self.inSave=False
-    
+
 
     def about(self):
          self.aboutWindow = AboutSetup()
@@ -131,9 +131,9 @@ class MainWindow(QtGui.QMainWindow):
 
     def setSerial(self, ser):
         self.provantSerial = ser
-        self.emergencia_button.clicked.connect(self.sendSerialStop)
-        self.reiniciar_button.clicked.connect(self.sendSerialRestart)
-        
+        # self.emergencia_button.clicked.connect(self.sendSerialStop)
+        # self.reiniciar_button.clicked.connect(self.sendSerialRestart)
+
 
     def addPoint(self, datasetName, y):
         if datasetName not in self.dataSets:
@@ -188,7 +188,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.horizon.setRoll(self.provantSerial.attitude.roll)
         self.horizon.setPitch(self.provantSerial.attitude.pitch)
-        
+
         self.attitudeRoll.setRoll(self.provantSerial.attitude.roll)
         self.label_6.setText(str(self.provantSerial.attitude.roll))
         self.attitudePitch.setRoll(self.provantSerial.attitude.pitch)
@@ -207,7 +207,7 @@ class MainWindow(QtGui.QMainWindow):
         if(self.sampleCounter>0):
             print timePass/self.sampleCounter
         '''
-        
+
 
         self.timerCounter += 1
         if self.provantSerial:
