@@ -2,7 +2,8 @@ __author__ = 'will'
 
 from PyQt4 import QtGui, uic
 import PyQt4.Qwt5 as Qwt
-from PyQt4.Qwt5.anynumpy import *
+# from PyQt4.Qwt5.anynumpy import *
+from numpy import *
 global XRANGE
 XRANGE = 500
 

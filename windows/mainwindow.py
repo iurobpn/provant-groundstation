@@ -11,7 +11,8 @@ from ui.items import CustomTreeItem
 from ui.data import *
 import random
 from helpers.serialHelpers import list_serial_ports
-from PyQt4.Qwt5.anynumpy import *
+# from PyQt4.Qwt5.anynumpy import *
+from numpy import *
 from dataread.provant_serial import ProvantSerial
 from ui.artificalHorizon import AttitudeIndicator
 from ui.artificalRoll import RollIndicator

@@ -1,5 +1,6 @@
 import sys
 import os
+import numpy as np
 from PyQt4 import QtGui, uic, Qt
 from windows.mainwindow import MainWindow
 
